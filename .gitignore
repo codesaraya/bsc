@@ -1,0 +1,19 @@
+node_modules
+.next
+.env
+.env.local
+.env.production
+src/payload-types.ts
+*.tsbuildinfo
+dist/
+data/
+build-*.txt
+seed-*.txt
+drop-db.mjs
+
+# Large image directories (served from Supabase storage)
+public/media
+public/Clients
+public/Hero
+public/Materials
+public/Products
