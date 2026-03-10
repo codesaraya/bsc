@@ -247,8 +247,8 @@ export default function Gallery({
       </div>
 
       {viewMode === 'grid' ? (
-        /* ── Grid view ── */
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4">
+        /* ── Grid view (masonry columns) ── */
+        <div className="columns-2 md:columns-3 gap-3 md:gap-4 mb-4">
           {images.map((img, i) => (
             <motion.button
               key={img.id}
@@ -256,20 +256,19 @@ export default function Gallery({
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.06, duration: 0.35 }}
               onClick={() => openLightbox(i)}
-              className="group relative rounded-2xl overflow-hidden cursor-pointer aspect-[4/3]"
+              className="group relative rounded-2xl overflow-hidden cursor-pointer mb-3 md:mb-4 block w-full break-inside-avoid"
             >
               {img.src ? (
-                <Image
+                <img
                   src={img.src}
                   alt={img.label}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="w-full h-auto rounded-2xl block"
+                  loading="lazy"
                 />
               ) : (
-                <>
-                  <div className={`absolute inset-0 ${img.gradient}`} />
-                  <div className={`absolute inset-0 bg-gradient-to-b ${img.accent}`} />
+                <div className="relative aspect-[4/3]">
+                  <div className={`absolute inset-0 ${img.gradient} rounded-2xl`} />
+                  <div className={`absolute inset-0 bg-gradient-to-b ${img.accent} rounded-2xl`} />
                   <div className="absolute inset-0 opacity-[0.07]">
                     <div
                       className="w-full h-full"
@@ -289,10 +288,10 @@ export default function Gallery({
                       <p className="text-white text-sm font-semibold px-2">{img.label}</p>
                     </div>
                   </div>
-                </>
+                </div>
               )}
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-2xl flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                   <Maximize2 className="w-6 h-6 text-white drop-shadow-lg" />
                 </div>
