@@ -303,7 +303,7 @@ export default function Gallery({
       ) : (
         <>
       {/* ── Main carousel ── */}
-      <div className="relative rounded-3xl overflow-hidden bg-gray-100 mb-4">
+      <div className="relative rounded-3xl overflow-hidden bg-gray-900 mb-4">
         {/* Main slide area */}
         <div className="relative h-[320px] md:h-[450px] lg:h-[500px] overflow-hidden">
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
@@ -322,7 +322,7 @@ export default function Gallery({
                     src={images[activeIndex].src!}
                     alt={images[activeIndex].label}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="100vw"
                     priority
                   />
@@ -533,7 +533,7 @@ export default function Gallery({
                         src={images[lightboxIndex].src!}
                         alt={images[lightboxIndex].label}
                         fill
-                        className="object-cover rounded-2xl"
+                        className="object-contain rounded-2xl"
                         sizes="100vw"
                         priority
                       />
