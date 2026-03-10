@@ -248,13 +248,15 @@ export default function ServicesShowcase({ data }: { data?: any }) {
             {/* Circular image */}
             <div className="mb-4">
               <div className="w-24 h-24 rounded-full overflow-hidden shadow-sm relative">
-                <img
-                  src={getImageUrl(s.uploadedImage)}
-                  alt={s.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                {getImageUrl(s.uploadedImage) && (
+                  <img
+                    src={getImageUrl(s.uploadedImage)}
+                    alt={s.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
 

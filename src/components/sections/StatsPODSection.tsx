@@ -186,16 +186,18 @@ export default function StatsPODSection({ data }: { data?: any }) {
               {/* Main image container */}
               <div className="relative rounded-2xl overflow-hidden shadow-lg w-full h-full min-h-[400px]">
                 {infoItems.map((item: any, i: number) => (
-                  <img
-                    key={i}
-                    src={getImageUrl(item.uploadedImage)}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                      activeLocation === i ? "opacity-100" : "opacity-0"
-                    }`}
-                  />
+                  getImageUrl(item.uploadedImage) ? (
+                    <img
+                      key={i}
+                      src={getImageUrl(item.uploadedImage)}
+                      alt={item.title}
+                      loading="lazy"
+                      decoding="async"
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                        activeLocation === i ? "opacity-100" : "opacity-0"
+                      }`}
+                    />
+                  ) : null
                 ))}
               </div>
 

@@ -94,13 +94,15 @@ function ClientCard({ name, logo, uploadedLogo }: { name: string; logo: string; 
 
         {/* Logo */}
         <div className="relative w-full aspect-[5/3]">
-          <img
-            src={getImageUrl(uploadedLogo)}
-            alt={name}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
+          {getImageUrl(uploadedLogo) && (
+            <img
+              src={getImageUrl(uploadedLogo)}
+              alt={name}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          )}
         </div>
       </div>
     </div>

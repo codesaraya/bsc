@@ -145,15 +145,17 @@ export default function Footer({ data, siteSettings }: { data?: any; siteSetting
             {/* Brand */}
             <div>
               <Link href="/" className="inline-block mb-5">
-                <img
-                  src={getImageUrl(data?.logoUpload)}
-                  alt={logoAlt}
-                  width={220}
-                  height={74}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-16 w-auto object-contain brightness-0 invert"
-                />
+                {(getImageUrl(data?.logoUpload) || "/logo.png") && (
+                  <img
+                    src={getImageUrl(data?.logoUpload) || "/logo.png"}
+                    alt={logoAlt}
+                    width={220}
+                    height={74}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-16 w-auto object-contain brightness-0 invert"
+                  />
+                )}
               </Link>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
                 {companyDescription}
