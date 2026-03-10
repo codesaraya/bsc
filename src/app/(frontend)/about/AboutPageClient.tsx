@@ -174,7 +174,7 @@ export default function AboutPageClient({ data, clientsData }: AboutPageClientPr
               {/* Center product image */}
               <div className="relative z-10 w-56 h-64 md:w-64 md:h-72 lg:w-80 lg:h-[22rem] rounded-2xl overflow-hidden shadow-lg">
                 <NextImage
-                  src={getImageUrl(d?.heroUploadedImage) || toSupabaseUrl("/Products/City%20Light/city%20light.jpg")}
+                  src={getImageUrl(d?.heroUploadedImage) || toSupabaseUrl("/Products/Brendiranje%20Poslovnih%20Prostora/Brendiranje%20poslovnih%20prostora9.jpg")}
                   alt={d?.heroImageAlt || "BSC digitalna štampa"}
                   fill
                   className="object-cover"

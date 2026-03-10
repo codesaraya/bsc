@@ -78,7 +78,11 @@ async function seed() {
   for (const slug of collections) {
     const existing = await payload.find({ collection: slug, limit: 1000 })
     for (const doc of existing.docs) {
-      await payload.delete({ collection: slug, id: doc.id })
+      try {
+        await payload.delete({ collection: slug, id: doc.id })
+      } catch (_e) {
+        // already deleted (cascade)
+      }
     }
     console.log(`   Cleared ${slug}`)
   }
@@ -1066,7 +1070,7 @@ async function seed() {
       heroBadge: 'Više o nama',
       heroHeading: 'O nama',
       heroSubtitle: 'Osnovani 2012. u sinergiji sa MMC Studiom, koji djeluje u Sarajevu od 1997. godine. Od ideje do gotovog proizvoda.',
-      heroUploadedImage: await m('/Products/City%20Light/city%20light.jpg'),
+      heroUploadedImage: await m('/Products/Brendiranje%20Poslovnih%20Prostora/Brendiranje%20poslovnih%20prostora9.jpg'),
       heading: 'Specijalizirana digitalna',
       headingItalic: 'štamparija',
       heroImageAlt: 'BSC digitalna štampa',
@@ -1126,7 +1130,7 @@ async function seed() {
       heroBadge: 'About us',
       heroHeading: 'About us',
       heroSubtitle: 'Founded in 2012 in synergy with MMC Studio, operating in Sarajevo since 1997. From idea to finished product.',
-      heroUploadedImage: await m('/Products/City%20Light/city%20light.jpg'),
+      heroUploadedImage: await m('/Products/Brendiranje%20Poslovnih%20Prostora/Brendiranje%20poslovnih%20prostora9.jpg'),
       heading: 'Specialized digital',
       headingItalic: 'printing company',
       heroImageAlt: 'BSC digital printing',
