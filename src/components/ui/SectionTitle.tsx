@@ -33,7 +33,7 @@ export default function SectionTitle({
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
           {subtitle}
         </p>
       )}

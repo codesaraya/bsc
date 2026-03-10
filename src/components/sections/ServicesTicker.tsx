@@ -13,7 +13,7 @@ const defaultServices = [
 /* CMYK-style overlapping dots separator */
 function DotSeparator() {
   return (
-    <span className="relative inline-flex items-center justify-center w-8 h-8 mx-6 shrink-0">
+    <span className="relative inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 mx-3 sm:mx-6 shrink-0">
       <span className="absolute w-4 h-4 rounded-full bg-[#FF4081] top-0 left-0 opacity-90" />
       <span className="absolute w-4 h-4 rounded-full bg-[#FFD740] top-0 right-0 opacity-90" />
       <span className="absolute w-4 h-4 rounded-full bg-[#00BCD4] bottom-0 left-1/2 -translate-x-1/2 opacity-90" />
@@ -36,7 +36,7 @@ export default function ServicesTicker({ data }: { data?: any }) {
           {list.map((s: any, i: number) => (
             <span key={i} className="flex items-center">
               <span
-                className={`text-4xl md:text-[56px] font-extrabold tracking-tight leading-none ${
+                className={`text-2xl sm:text-4xl md:text-[56px] font-extrabold tracking-tight leading-none ${
                   s.highlight ? "text-[#42C6D9]" : "text-[#1A1464]"
                 }`}
               >
@@ -52,7 +52,7 @@ export default function ServicesTicker({ data }: { data?: any }) {
           {list.map((s: any, i: number) => (
             <span key={`dup-${i}`} className="flex items-center">
               <span
-                className={`text-4xl md:text-[56px] font-extrabold tracking-tight leading-none ${
+                className={`text-2xl sm:text-4xl md:text-[56px] font-extrabold tracking-tight leading-none ${
                   s.highlight ? "text-[#42C6D9]" : "text-[#1A1464]"
                 }`}
               >

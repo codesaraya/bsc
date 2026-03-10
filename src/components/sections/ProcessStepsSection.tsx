@@ -73,7 +73,7 @@ export default function ProcessStepsSection({ data }: { data?: any }) {
           </p>
         </div>
         {/* Card container */}
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_2px_40px_rgba(0,0,0,0.04)] px-8 md:px-12 py-12 md:py-14">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_2px_40px_rgba(0,0,0,0.04)] px-4 sm:px-8 md:px-12 py-8 sm:py-12 md:py-14">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
             {steps.map((step: any, i: number) => (
               <div key={i} className="flex items-center gap-4 md:gap-6">

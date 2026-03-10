@@ -26,7 +26,7 @@ export default function ProductCard({
   const card = (
     <div className="bg-white rounded-2xl shadow-soft overflow-hidden group hover:scale-105 transition-transform duration-300">
       {/* Image */}
-      <div className="h-56 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center relative overflow-hidden">
+      <div className="h-40 sm:h-56 bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center relative overflow-hidden">
         {image ? (
           <img
             src={image}

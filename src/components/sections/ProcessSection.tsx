@@ -49,7 +49,7 @@ export default function ProcessSection({ data }: { data?: any }) {
           transition={{ duration: 0.6 }}
           className="bg-white rounded-2xl shadow-soft border border-gray-100 px-5 py-8 sm:px-8 sm:py-10 md:px-12"
         >
-          <div className={`grid grid-cols-1 gap-6 sm:gap-8 md:gap-12 ${steps.length <= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
+          <div className={`grid grid-cols-2 gap-4 sm:gap-8 md:gap-12 ${steps.length <= 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
             {steps.map((step: any, i: number) => {
               const Icon = step.IconComponent;
               return (

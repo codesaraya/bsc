@@ -44,8 +44,8 @@ export default function MaterialCard({
           </div>
         )}
       </div>
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-dark mb-2">{title}</h3>
+      <div className="p-4 sm:p-6">
+        <h3 className="text-base sm:text-xl font-bold text-dark mb-2">{title}</h3>
         <p className="text-gray-500 text-sm leading-relaxed mb-4">
           {description}
         </p>

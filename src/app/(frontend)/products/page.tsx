@@ -156,7 +156,7 @@ export default async function ProductsPage() {
                 className="group relative bg-white rounded-3xl shadow-soft overflow-hidden hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
               >
                 {/* Gradient header */}
-                <div className="bg-gradient-to-r from-dark to-[#1a1060] p-8 flex items-center gap-5 relative overflow-hidden">
+                <div className="bg-gradient-to-r from-dark to-[#1a1060] p-5 sm:p-8 flex items-center gap-5 relative overflow-hidden">
                   {/* Decorative circle */}
                   <div className="absolute -right-6 -top-6 w-32 h-32 bg-primary/10 rounded-full" />
                   <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-white backdrop-blur-sm border border-white/10 relative z-10">
@@ -208,7 +208,7 @@ export default async function ProductsPage() {
               title={d?.whyTitle || "Zašto odabrati nas?"}
               subtitle={d?.whySubtitle || "Kvalitet, brzina i pouzdanost — naši temeljni principi od samog početka."}
             />
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
               {whyCards.map((item: any, i: number) => {
                 const Icon = whyIcons[i] || Sparkles;
                 return (

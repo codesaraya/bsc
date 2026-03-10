@@ -119,7 +119,7 @@ export default function PortfolioSection({ data }: { data?: any }) {
               className="relative overflow-hidden group cursor-pointer"
             >
               {/* Image */}
-              <div className="w-full h-full min-h-[290px] relative">
+              <div className="w-full h-full min-h-[180px] sm:min-h-[290px] relative">
                 {getImageUrl(item.uploadedImage) && (
                   <img
                     src={getImageUrl(item.uploadedImage)}

@@ -198,8 +198,8 @@ export default async function MaterialCategoryPage({
             <span className="text-white font-medium">{category.title}</span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-white backdrop-blur-sm border border-white/10">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="w-14 h-14 sm:w-20 sm:h-20 bg-white/10 rounded-2xl sm:rounded-3xl flex items-center justify-center text-white backdrop-blur-sm border border-white/10">
               {categoryIcons[category.slug]}
             </div>
             <div>
@@ -283,7 +283,7 @@ export default async function MaterialCategoryPage({
             <div className="mt-20">
               <h2 className="text-2xl font-bold text-dark mb-2">{cp?.whyTitle || 'Zašto odabrati nas?'}</h2>
               <p className="text-gray-500 mb-8">{cp?.whySubtitle || 'Kvalitet, brzina i pouzdanost — naši temeljni principi od samog početka.'}</p>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                 {resolvedWhyCards.map((item: any) => (
                   <div key={item.title} className="flex items-start gap-3 p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:border-primary/20 hover:shadow-sm transition-all">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-dark to-[#1a1060] flex items-center justify-center text-white shrink-0">
@@ -339,7 +339,7 @@ export default async function MaterialCategoryPage({
             <div className="max-w-5xl mx-auto mt-16">
               <h2 className="text-2xl font-bold text-dark mb-2">{cp?.exploreCategoriesTitle || 'Istražite druge kategorije'}</h2>
               <p className="text-gray-500 text-sm mb-6">{cp?.exploreCategoriesSubtitle || 'Pogledajte i ostale tehnologije i materijale koje nudimo.'}</p>
-              <div className="grid sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {otherCategories.map((cat) => (
                   <Link
                     key={cat.slug}

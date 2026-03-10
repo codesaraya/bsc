@@ -160,7 +160,7 @@ export default function ContactPageClient({ data }: ContactPageClientProps) {
       {/* Contact Info Cards */}
       <section className="py-12 md:py-20">
         <Container>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {contactInfo.map((item: any, i: number) => {
               const Icon = item.icon;
               return (

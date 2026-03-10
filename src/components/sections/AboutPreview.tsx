@@ -192,7 +192,7 @@ export default function AboutPreview({ data }: { data?: any }) {
             </p>
 
             {/* Feature cards */}
-            <div className="grid sm:grid-cols-2 gap-5 mb-10">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 mb-10">
               {features.map((feature: any) => (
                 <div
                   key={feature.title}

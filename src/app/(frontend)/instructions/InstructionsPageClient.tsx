@@ -240,7 +240,7 @@ export default function InstructionsPageClient({ data }: InstructionsPageClientP
             </motion.div>
 
             {/* Prep tips grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-12">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-12">
               {prepTips.map((tip: any, i: number) => (
                 <motion.div
                   key={tip.title}
