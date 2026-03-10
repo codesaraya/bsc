@@ -12,6 +12,7 @@ import PortfolioSection from "@/components/sections/PortfolioSection";
 import ClientsSection from "@/components/sections/ClientsSection";
 import StatsPODSection from "@/components/sections/StatsPODSection";
 import ProcessStepsSection from "@/components/sections/ProcessStepsSection";
+import ProductsGrid from "@/components/sections/ProductsGrid";
 import NewsSection from "@/components/sections/NewsSection";
 import CTASection from "@/components/sections/CTASection";
 
@@ -58,6 +59,7 @@ export default async function Home() {
       <ClientsSection data={hp?.clientsSection} />
       <StatsPODSection data={hp?.statsSection} />
       <ProcessStepsSection data={hp?.certificatesSection} />
+      <ProductsGrid data={{ ...hp?.productsGrid, uiLabels }} />
       <NewsSection data={{ ...hp?.newsSection, uiLabels }} articles={newsArticles} />
       <CTASection data={hp?.ctaSection} />
     </>

@@ -81,7 +81,7 @@ export default function ServicesShowcase({ data }: { data?: any }) {
   const buttonText = data?.buttonText || "Svi materijali";
   const buttonLink = data?.buttonLink || "/materials";
   const featuresHeading = data?.featuresHeading || "Prednost naše štamparije u odnosu na druge";
-  const readMoreText = data?.readMoreText || "Read Out More";
+  const readMoreText = data?.readMoreText || "Pročitajte više";
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);

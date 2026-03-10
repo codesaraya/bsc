@@ -6,6 +6,7 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import ProductCard from "@/components/cards/ProductCard";
+import { getImageUrl } from '@/lib/imageUrl';
 
 const defaultProducts = [
   {
@@ -29,7 +30,11 @@ const defaultProducts = [
 ];
 
 export default function ProductsGrid({ data }: { data?: any }) {
-  const products = data?.products || defaultProducts;
+  const rawProducts = data?.products || defaultProducts;
+  const products = rawProducts.map((p: any) => ({
+    ...p,
+    image: p.image || getImageUrl(p.uploadedImage) || '',
+  }));
   const badge = data?.badge || "Proizvodi";
   const title = data?.title || "Nova rješenja iz naše radionice";
   const subtitle = data?.subtitle || "Istražite naše najpopularnije proizvode koje smo kreirali za naše klijente.";

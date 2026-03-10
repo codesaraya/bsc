@@ -133,7 +133,6 @@ interface Article {
   title: string;
   excerpt: string;
   content: string;
-  image: string;
   imageUrl?: string;
   date: string;
   category: string;

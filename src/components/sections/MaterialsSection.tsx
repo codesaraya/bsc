@@ -6,6 +6,7 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import MaterialCard from "@/components/cards/MaterialCard";
+import { getImageUrl } from '@/lib/imageUrl';
 
 const defaultMaterials = [
   {
@@ -32,7 +33,11 @@ const defaultMaterials = [
 ];
 
 export default function MaterialsSection({ data }: { data?: any }) {
-  const materials = data?.materials || defaultMaterials;
+  const rawMaterials = data?.materials || defaultMaterials;
+  const materials = rawMaterials.map((m: any) => ({
+    ...m,
+    image: m.image || getImageUrl(m.uploadedImage) || '',
+  }));
   const badge = data?.badge || "Naši materijali";
   const title = data?.title || "Kvalitetni materijali";
   const subtitle = data?.subtitle || "Koristimo samo najkvalitetnije materijale kako bi vaši printovi izgledali besprijekorno i trajali dugo.";
