@@ -8,7 +8,7 @@ interface NewsCardProps {
   slug: string;
   title: string;
   excerpt: string;
-  image: string;
+  image?: string;
   imageUrl?: string;
   date: string;
   category: string;

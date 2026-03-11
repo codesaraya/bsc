@@ -134,6 +134,10 @@ const defaultNavigation = [
   { name: "Upute", href: "/instructions" },
 ];
 
+interface NavSubItem { name: string; slug: string }
+interface NavColumn { title: string; href: string; items: NavSubItem[] }
+interface NavItem { name: string; href: string; megaMenu?: boolean; columns?: NavColumn[] }
+
 export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: any; siteSettings?: any; locale?: Locale }) {
   const [isAtTop, setIsAtTop] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -149,7 +153,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
   };
 
   // Use data from Payload or fall back to hardcoded navigation
-  const navigation = data?.items?.map((item: any) => ({
+  const navigation: NavItem[] = data?.items?.map((item: any) => ({
     name: item.label,
     href: item.href,
     megaMenu: item.hasMegaMenu,
@@ -245,7 +249,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
                           <div className="h-px bg-gradient-to-r from-transparent via-[#42C6D9]/30 to-transparent" />
                           <div className="max-w-7xl mx-auto px-8 py-8">
                             <div className="grid grid-cols-4 gap-10">
-                              {item.columns.map((col: { title: string; href: string; items: { name: string; slug?: string }[] | string[] }) => (
+                              {item.columns!.map((col: { title: string; href: string; items: { name: string; slug?: string }[] | string[] }) => (
                                 <div key={col.title}>
                                   <Link
                                     href={col.href}

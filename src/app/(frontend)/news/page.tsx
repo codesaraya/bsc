@@ -121,8 +121,8 @@ export default async function NewsPage() {
               <div className="relative z-10 grid md:grid-cols-2 gap-8 items-center">
                 {/* Left – Article image or placeholder */}
                 <div className="h-64 md:h-80 flex items-center justify-center overflow-hidden">
-                  {(featured as any).imageUrl ? (
-                    <img src={(featured as any).imageUrl} alt={featured.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-l-[2rem]" />
+                  {featured.imageUrl ? (
+                    <img src={featured.imageUrl} alt={featured.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-l-[2rem]" />
                   ) : (
                     <div className="text-center">
                       <div className="w-20 h-20 bg-white/40 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -196,7 +196,7 @@ export default async function NewsPage() {
         <Container>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8">
             {rest.map((article) => (
-              <NewsCard key={article.slug} {...article} imageUrl={(article as any).imageUrl} placeholderText={uiLabels?.newsPlaceholder} readMoreText={uiLabels?.newsReadMore} />
+              <NewsCard key={article.slug} {...article} placeholderText={uiLabels?.newsPlaceholder} readMoreText={uiLabels?.newsReadMore} />
             ))}
           </div>
         </Container>

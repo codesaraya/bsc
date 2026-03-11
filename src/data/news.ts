@@ -3,7 +3,7 @@
   title: string;
   excerpt: string;
   content: string;
-  image: string;
+  imageUrl: string;
   date: string;
   category: string;
   author: string;
@@ -31,7 +31,7 @@ Na\u0161i novi odr\u017eivi materijali uklju\u010duju reciklirani papir, biorazg
 Odr\u017eivost nije samo trend \u2014 to je odgovornost. Odabirom ekolo\u0161kih materijala za \u0161tampu, pozitivno utje\u010dete na okoli\u0161 dok istovremeno \u0161aljete sna\u017enu poruku va\u0161im klijentima o vrijednostima va\u0161eg brenda.
 
 Kontaktirajte nas danas da saznate vi\u0161e o na\u0161im ekolo\u0161kim opcijama i kako mogu funkcionisati za va\u0161 sljede\u0107i projekat.`,
-    image: "/news/eco.jpg",
+    imageUrl: "/news/eco.jpg",
     date: "20. feb 2026.",
     category: "Odr\u017eivost",
     author: "BSC Tim",
@@ -60,7 +60,7 @@ Prvi utisak je va\u017ean, a va\u0161a ambala\u017ea je \u010desto prva fizi\u01
 Razumijemo da mala preduze\u0107a imaju ograni\u010den bud\u017eet. Zato smo dizajnirali na\u0161a rje\u0161enja da budu pristupa\u010dna, sa malim minimalnim narud\u017ebama i konkurentnim cijenama.
 
 Zapo\u010dnite danas uz besplatnu konsultaciju!`,
-    image: "/news/packaging.jpg",
+    imageUrl: "/news/packaging.jpg",
     date: "15. feb 2026.",
     category: "Proizvodi",
     author: "BSC Tim",
@@ -98,7 +98,7 @@ Umjesto \u010diste crne (K:100), koristite bogatu crnu (C:40 M:30 Y:30 K:100) za
 Uvijek zatra\u017eite probni otisak \u2014 digitalni ili fizi\u010dki \u2014 prije pu\u0161tanja pune narud\u017ebe u \u0161tampu. Ovo vam omogu\u0107ava da uhvatite eventualne probleme prije nego \u0161to bude kasno.
 
 Pratite ove savjete i va\u0161e \u0161tampe \u0107e izgledati sjajno svaki put!`,
-    image: "/news/design.jpg",
+    imageUrl: "/news/design.jpg",
     date: "10. feb 2026.",
     category: "Savjeti",
     author: "BSC Tim",
@@ -136,7 +136,7 @@ Prije pakovanja, svaka narud\u017eba prolazi kroz zavr\u0161nu kontrolu kvalitet
 Va\u0161a narud\u017eba se pa\u017eljivo pakuje kako bi se sprije\u010dila o\u0161te\u0107enja tokom transporta i \u0161alje putem odabranog na\u010dina dostave.
 
 Ponosni smo na svaki korak ovog procesa jer znamo koliko su va\u0161e \u0161tampe va\u017ene za vas.`,
-    image: "/news/process.jpg",
+    imageUrl: "/news/process.jpg",
     date: "5. feb 2026.",
     category: "Kompanija",
     author: "BSC Tim",
@@ -170,7 +170,7 @@ Od mat zavr\u0161ne obrade do kraft papira i soft-touch laminacije, teksturirane
 Brendovi kreiraju tematske mini pakete naljepnica kao promotivne artikle i merchandise. Pristupa\u010dni su za proizvodnju, a klijenti ih obo\u017eavaju.
 
 Spremni da pratite trendove? Kontaktirajte nas za ponudu!`,
-    image: "/news/trends.jpg",
+    imageUrl: "/news/trends.jpg",
     date: "28. jan 2026.",
     category: "Trendovi",
     author: "BSC Tim",
@@ -210,7 +210,7 @@ Gramatura papira utje\u010de na trajnost i do\u017eivljaj. Lak\u0161e gramature 
 Kvalitetniji materijali ko\u0161taju vi\u0161e, ali tako\u0111er stvaraju bolji utisak. Balansirajte bud\u017eet sa utjecajem koji \u017eelite posti\u0107i.
 
 Jo\u0161 niste sigurni? Na\u0161 tim je spreman da vam pru\u017ei uzorke materijala i preporuke za va\u0161 specifi\u010dan projekat.`,
-    image: "/news/material-guide.jpg",
+    imageUrl: "/news/material-guide.jpg",
     date: "20. jan 2026.",
     category: "Vodi\u010d",
     author: "BSC Tim",
