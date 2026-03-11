@@ -17,3 +17,7 @@ public/Clients
 public/Hero
 public/Materials
 public/Products
+
+# Server SSH deploy key (DO NOT COMMIT)
+.ssh-deploykey
+.ssh-deploykey.pub
