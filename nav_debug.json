@@ -1,0 +1,401 @@
+﻿{
+    "id":  1,
+    "ctaText":  "Kontaktirajte nas",
+    "ctaLink":  "/contact",
+    "viewAllText":  "Pogledaj sve â",
+    "languages":  [
+                      {
+                          "id":  "69b03a52c3a9a146ec145dea",
+                          "code":  "bs",
+                          "active":  true
+                      },
+                      {
+                          "id":  "69b03a52c3a9a146ec145deb",
+                          "code":  "en",
+                          "active":  true
+                      }
+                  ],
+    "items":  [
+                  {
+                      "id":  "69b03a52c3a9a146ec145dec",
+                      "href":  "/",
+                      "hasMegaMenu":  false,
+                      "columns":  [
+
+                                  ],
+                      "label":  "PoÄetna"
+                  },
+                  {
+                      "id":  "69b03a52c3a9a146ec145e0f",
+                      "href":  "/materials",
+                      "hasMegaMenu":  true,
+                      "columns":  [
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145df6",
+                                          "href":  "/materials/uv-ecosolvent-latex",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145ded",
+                                                            "slug":  "pvc-naljepnice",
+                                                            "name":  "PVC Naljepnice"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dee",
+                                                            "slug":  "one-way-vision",
+                                                            "name":  "One Way Vision"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145def",
+                                                            "slug":  "back-light",
+                                                            "name":  "Back Light"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df0",
+                                                            "slug":  "banner-textilni-banner-flag",
+                                                            "name":  "Banner / Textilni Banner / Flag"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df1",
+                                                            "slug":  "cerade-kamionske",
+                                                            "name":  "Cerade / Kamionske"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df2",
+                                                            "slug":  "canvas",
+                                                            "name":  "Canvas"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df3",
+                                                            "slug":  "tapete",
+                                                            "name":  "Tapete"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df4",
+                                                            "slug":  "podna-grafika",
+                                                            "name":  "Podna Grafika"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df5",
+                                                            "slug":  "poster-papir",
+                                                            "name":  "Poster Papir"
+                                                        }
+                                                    ],
+                                          "title":  "UV / ECOSOLVENT / LATEX"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145dfe",
+                                          "href":  "/materials/uv-direktni-print",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df7",
+                                                            "slug":  "staklo",
+                                                            "name":  "Staklo"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df8",
+                                                            "slug":  "drvo",
+                                                            "name":  "Drvo"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145df9",
+                                                            "slug":  "forex",
+                                                            "name":  "Forex"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dfa",
+                                                            "slug":  "plexiglass",
+                                                            "name":  "Plexiglass"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dfb",
+                                                            "slug":  "kapaline",
+                                                            "name":  "Kapaline"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dfc",
+                                                            "slug":  "alu-bond",
+                                                            "name":  "Alu Bond"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dfd",
+                                                            "slug":  "mdf",
+                                                            "name":  "MDF"
+                                                        }
+                                                    ],
+                                          "title":  "UV DIREKTNI PRINT"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e08",
+                                          "href":  "/materials/cnc",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145dff",
+                                                            "slug":  "mdf",
+                                                            "name":  "MDF"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e00",
+                                                            "slug":  "iverica",
+                                                            "name":  "Iverica"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e01",
+                                                            "slug":  "spera",
+                                                            "name":  "Å pera"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e02",
+                                                            "slug":  "aluminij",
+                                                            "name":  "Aluminij"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e03",
+                                                            "slug":  "forex-plastika",
+                                                            "name":  "Forex / Plastika"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e04",
+                                                            "slug":  "plexiglass",
+                                                            "name":  "Plexiglass"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e05",
+                                                            "slug":  "medijapan",
+                                                            "name":  "Medijapan"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e06",
+                                                            "slug":  "drvo",
+                                                            "name":  "Drvo"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e07",
+                                                            "slug":  "plasticni-karton-akyplac",
+                                                            "name":  "PlastiÄni Karton / Akyplac"
+                                                        }
+                                                    ],
+                                          "title":  "CNC"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e0e",
+                                          "href":  "/materials/laser",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e09",
+                                                            "slug":  "kapafix",
+                                                            "name":  "Kapafix"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e0a",
+                                                            "slug":  "plexiglass",
+                                                            "name":  "Plexiglass"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e0b",
+                                                            "slug":  "koza",
+                                                            "name":  "KoÅ¾a"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e0c",
+                                                            "slug":  "papir-karton",
+                                                            "name":  "Papir / Karton"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e0d",
+                                                            "slug":  "spera-drvo",
+                                                            "name":  "Å pera / Drvo"
+                                                        }
+                                                    ],
+                                          "title":  "LASER"
+                                      }
+                                  ],
+                      "label":  "Materijali"
+                  },
+                  {
+                      "id":  "69b03a52c3a9a146ec145e2c",
+                      "href":  "/products",
+                      "hasMegaMenu":  true,
+                      "columns":  [
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e14",
+                                          "href":  "/products/brendiranje",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e10",
+                                                            "slug":  "poslovnih-stambenih-prostora",
+                                                            "name":  "Poslovnih / Stambenih Prostora"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e11",
+                                                            "slug":  "vozila",
+                                                            "name":  "Vozila"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e12",
+                                                            "slug":  "predmeta",
+                                                            "name":  "Predmeta"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e13",
+                                                            "slug":  "stajalista",
+                                                            "name":  "StajaliÅ¡ta"
+                                                        }
+                                                    ],
+                                          "title":  "BRENDIRANJE"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e1c",
+                                          "href":  "/products/outdoor-indoor",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e15",
+                                                            "slug":  "wallscape",
+                                                            "name":  "Wallscape"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e16",
+                                                            "slug":  "billboard",
+                                                            "name":  "Billboard"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e17",
+                                                            "slug":  "banneri",
+                                                            "name":  "Banneri"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e18",
+                                                            "slug":  "cerade-kamionske",
+                                                            "name":  "Cerade / Kamionske"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e19",
+                                                            "slug":  "mesh",
+                                                            "name":  "Mesh"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e1a",
+                                                            "slug":  "city-light",
+                                                            "name":  "City Light"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e1b",
+                                                            "slug":  "svijetlece-reklame",
+                                                            "name":  "SvijetleÄe Reklame"
+                                                        }
+                                                    ],
+                                          "title":  "OUTDOOR I INDOOR"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e24",
+                                          "href":  "/products/home-and-office",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e1d",
+                                                            "slug":  "home-dekor-assesoar",
+                                                            "name":  "Home Dekor / Assesoar"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e1e",
+                                                            "slug":  "wall-art",
+                                                            "name":  "Wall Art"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e1f",
+                                                            "slug":  "3d-zidni-paneli",
+                                                            "name":  "3D Zidni Paneli"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e20",
+                                                            "slug":  "pregrade",
+                                                            "name":  "Pregrade"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e21",
+                                                            "slug":  "informativne-oznake",
+                                                            "name":  "Informativne Oznake"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e22",
+                                                            "slug":  "info-display",
+                                                            "name":  "Info Display"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e23",
+                                                            "slug":  "kancelarijski-materijal",
+                                                            "name":  "Kancelarijski Materijal"
+                                                        }
+                                                    ],
+                                          "title":  "HOME AND OFFICE"
+                                      },
+                                      {
+                                          "id":  "69b03a52c3a9a146ec145e2b",
+                                          "href":  "/products/promo-pos",
+                                          "items":  [
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e25",
+                                                            "slug":  "standovi",
+                                                            "name":  "Å tandovi"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e26",
+                                                            "slug":  "plex",
+                                                            "name":  "Plex StalaÅ¾e"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e27",
+                                                            "slug":  "sajamski-elementi",
+                                                            "name":  "Sajamski Elementi"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e28",
+                                                            "slug":  "vobleri-table-tent",
+                                                            "name":  "Vobleri / Table Tent"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e29",
+                                                            "slug":  "senzormatici",
+                                                            "name":  "Senzormatici"
+                                                        },
+                                                        {
+                                                            "id":  "69b03a52c3a9a146ec145e2a",
+                                                            "slug":  "showcard",
+                                                            "name":  "Showcard"
+                                                        }
+                                                    ],
+                                          "title":  "PROMO / POS"
+                                      }
+                                  ],
+                      "label":  "Proizvodi"
+                  },
+                  {
+                      "id":  "69b03a52c3a9a146ec145e2d",
+                      "href":  "/about",
+                      "hasMegaMenu":  false,
+                      "columns":  [
+
+                                  ],
+                      "label":  "O nama"
+                  },
+                  {
+                      "id":  "69b03a52c3a9a146ec145e2e",
+                      "href":  "/news",
+                      "hasMegaMenu":  false,
+                      "columns":  [
+
+                                  ],
+                      "label":  "Novosti"
+                  },
+                  {
+                      "id":  "69b03a52c3a9a146ec145e2f",
+                      "href":  "/instructions",
+                      "hasMegaMenu":  false,
+                      "columns":  [
+
+                                  ],
+                      "label":  "Upute"
+                  }
+              ],
+    "updatedAt":  "2026-03-10T15:35:47.945Z",
+    "createdAt":  "2026-03-10T10:25:09.857Z",
+    "globalType":  "navigation"
+}
