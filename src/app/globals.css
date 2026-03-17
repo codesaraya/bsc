@@ -36,6 +36,21 @@ html {
   background: #35a8b8;
 }
 
+/* Thin horizontal scrollbar for thumbnail strips */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #42C6D9;
+  border-radius: 2px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #35a8b8;
+}
+
 @keyframes marquee-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }

@@ -39,6 +39,24 @@ export const MaterialItems: CollectionConfig = {
       label: 'Opis',
     },
     {
+      name: 'longDescription1',
+      type: 'textarea',
+      localized: true,
+      label: 'Duži opis — paragraf 1',
+      admin: {
+        description: 'Opcionalan prvi paragraf detaljnog opisa. Ako je prazno, koristi se globalni tekst sa stranice materijala.',
+      },
+    },
+    {
+      name: 'longDescription2',
+      type: 'textarea',
+      localized: true,
+      label: 'Duži opis — paragraf 2',
+      admin: {
+        description: 'Opcionalan drugi paragraf detaljnog opisa. Ako je prazno, koristi se globalni tekst sa stranice materijala.',
+      },
+    },
+    {
       name: 'uploadedImage',
       type: 'upload',
       relationTo: 'media',

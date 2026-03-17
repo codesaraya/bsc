@@ -138,6 +138,9 @@ export default async function MaterialItemPage({
             name: it.name,
             slug: it.slug,
             description: it.description,
+            longDescription1: it.longDescription1 || '',
+            longDescription2: it.longDescription2 || '',
+            itemFeatures: (it.features || []).map((f: any) => ({ title: f.title, text: f.description, icon: f.icon })),
             image: getImageUrl(it.uploadedImage),
             galleryPhotos: (it.galleryImages || []).map((gi: any) => getImageUrl(gi.uploadedImage)).filter(Boolean),
           }));
@@ -270,10 +273,10 @@ export default async function MaterialItemPage({
                   {item.description}
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  {ip?.aboutParagraph1 || 'Koristimo isključivo materijale vrhunskog kvaliteta od provjerenih dobavljača. Svaki materijal prolazi rigoroznu kontrolu kvaliteta prije obrade, čime garantujemo izvanredne rezultate za svaki projekat. Naša oprema omogućava štampu u visokoj rezoluciji do 1440dpi, sa preciznom reprodukcijom boja i dugotrajnim rezultatima.'}
+                  {(item as any).longDescription1 || ip?.aboutParagraph1 || 'Koristimo isključivo materijale vrhunskog kvaliteta od provjerenih dobavljača. Svaki materijal prolazi rigoroznu kontrolu kvaliteta prije obrade, čime garantujemo izvanredne rezultate za svaki projekat. Naša oprema omogućava štampu u visokoj rezoluciji do 1440dpi, sa preciznom reprodukcijom boja i dugotrajnim rezultatima.'}
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  {ip?.aboutParagraph2 || 'Bez obzira da li vam treba mala serija ili velika naklada, naš tim stručnjaka će pronaći optimalno rješenje za vaše potrebe — od savjetovanja pri izboru materijala do finalne obrade i isporuke.'}
+                  {(item as any).longDescription2 || ip?.aboutParagraph2 || 'Bez obzira da li vam treba mala serija ili velika naklada, naš tim stručnjaka će pronaći optimalno rješenje za vaše potrebe — od savjetovanja pri izboru materijala do finalne obrade i isporuke.'}
                 </p>
 
                 {/* Features grid */}

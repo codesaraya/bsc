@@ -167,6 +167,21 @@ export default function StatsPODSection({ data }: { data?: any }) {
   const starburstText = data?.starburstText || "Kvalitetna Štampa";
 
   const [activeLocation, setActiveLocation] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (!autoPlay) {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      return;
+    }
+    autoPlayRef.current = setInterval(() => {
+      setActiveLocation((prev) => (prev + 1) % infoItems.length);
+    }, 5000);
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [autoPlay, infoItems.length]);
 
   return (
     <>
@@ -246,10 +261,10 @@ export default function StatsPODSection({ data }: { data?: any }) {
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeLocation}
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.25 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
                     className="absolute bottom-4 left-5 right-5"
                   >
                     <h3 className="text-white font-bold text-base sm:text-lg drop-shadow-md">
@@ -258,45 +273,17 @@ export default function StatsPODSection({ data }: { data?: any }) {
                   </motion.div>
                 </AnimatePresence>
 
-                {/* Starburst badge — inside image on desktop */}
-                <div className="absolute bottom-3 right-3 sm:bottom-auto sm:top-4 sm:left-4 z-20 hidden sm:block">
-                  <svg
-                    width="190"
-                    height="72"
-                    viewBox="0 0 190 72"
-                    fill="none"
-                    className="drop-shadow-md"
-                  >
-                    <path
-                      d="M8 36C8 22 14 12 28 9C26 4 38 1 52 4C60 -1 74 -1 90 4C106 -1 120 -1 128 4C142 1 154 4 156 9C170 12 182 22 182 36C182 50 170 60 156 63C154 68 142 71 128 68C120 73 106 73 90 68C74 73 60 73 52 68C38 71 26 68 28 63C14 60 8 50 8 36Z"
-                      fill="#67E8F9"
-                    />
-                    <circle cx="62" cy="36" r="3" fill="#42C6D9" />
-                    <text
-                      x="95"
-                      y="37"
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      fill="#1A1464"
-                      fontWeight="bold"
-                      fontSize="13"
-                      fontStyle="italic"
-                    >
-                      {starburstText}
-                    </text>
-                    <circle cx="128" cy="36" r="3" fill="#42C6D9" />
-                  </svg>
-                </div>
               </div>
 
               {/* Contact detail cards — animate on hover/tap change */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeLocation}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  initial={{ opacity: 0, y: -60, scaleY: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                  exit={{ opacity: 0, y: 60, scaleY: 0.95 }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ originY: 0 }}
                   className="flex flex-col gap-2.5 sm:gap-3"
                 >
                   {/* Contact grid */}
@@ -309,6 +296,17 @@ export default function StatsPODSection({ data }: { data?: any }) {
                         <div className="min-w-0">
                           <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Adresa</p>
                           <p className="text-[11px] sm:text-[12px] text-dark font-medium leading-snug">{infoItems[activeLocation].address}</p>
+                          {infoItems[activeLocation]?.mapUrl && (
+                            <a
+                              href={infoItems[activeLocation].mapUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-semibold text-[10px] sm:text-[11px] transition-colors mt-1.5"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                              Google Maps
+                            </a>
+                          )}
                         </div>
                       </div>
                     )}
@@ -347,8 +345,8 @@ export default function StatsPODSection({ data }: { data?: any }) {
                     )}
                   </div>
 
-                  {/* Working Hours + Map link row */}
-                  <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+                  {/* Working Hours */}
+                  <div className="flex flex-col gap-2.5 sm:gap-3">
                     {infoItems[activeLocation]?.workingHours?.length > 0 && (
                       <div className="bg-gradient-to-br from-dark via-[#1a1060] to-dark rounded-xl p-3.5 sm:p-4 flex-1">
                         <div className="flex items-center gap-2 mb-2.5 sm:mb-3">
@@ -366,19 +364,6 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           ))}
                         </div>
                       </div>
-                    )}
-
-                    {/* Map link */}
-                    {infoItems[activeLocation]?.mapUrl && (
-                      <a
-                        href={infoItems[activeLocation].mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center sm:justify-start gap-2 text-primary hover:text-primary/80 font-semibold text-[12px] transition-colors sm:self-end sm:pb-1"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        Google Maps
-                      </a>
                     )}
                   </div>
                 </motion.div>
@@ -403,8 +388,8 @@ export default function StatsPODSection({ data }: { data?: any }) {
                 {infoItems.map((item: any, i: number) => (
                   <div
                     key={i}
-                    onMouseEnter={() => setActiveLocation(i)}
-                    onClick={() => setActiveLocation(i)}
+                    onMouseEnter={() => { if (autoPlay) setActiveLocation(i); }}
+                    onClick={() => { setAutoPlay(false); setActiveLocation(i); }}
                     className={`group relative transition-all duration-300 rounded-2xl px-5 sm:pl-7 sm:pr-7 py-5 sm:py-6 cursor-pointer lg:cursor-default ${
                       activeLocation === i
                         ? "border-l-[3px] border-primary bg-white shadow-[0_4px_32px_rgba(0,0,0,0.07)]"

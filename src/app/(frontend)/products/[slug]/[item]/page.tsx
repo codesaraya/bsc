@@ -138,6 +138,9 @@ export default async function ProductItemPage({
             name: it.name,
             slug: it.slug,
             description: it.description,
+            longDescription1: it.longDescription1 || '',
+            longDescription2: it.longDescription2 || '',
+            itemFeatures: (it.features || []).map((f: any) => ({ title: f.title, text: f.description, icon: f.icon })),
             image: getImageUrl(it.uploadedImage),
             galleryPhotos: (it.galleryImages || []).map((gi: any) => getImageUrl(gi.uploadedImage)).filter(Boolean),
           }));
@@ -193,7 +196,8 @@ export default async function ProductItemPage({
     { title: "Brza izrada", text: "Efikasan proces i poštivanje rokova" },
     { title: "Prilagodljivo", text: "Potpuno prilagođeno vašim zahtjevima" },
   ];
-  const uspCards = (ip?.uspCards?.length > 0 ? ip.uspCards : defaultUsps).map((u: any, i: number) => ({ ...u, icon: uspIcons[i % uspIcons.length] }));
+  const uspSource = (item as any).itemFeatures?.length > 0 ? (item as any).itemFeatures : (ip?.uspCards?.length > 0 ? ip.uspCards : defaultUsps);
+  const uspCards = uspSource.map((u: any, i: number) => ({ ...u, icon: uspIcons[i % uspIcons.length] }));
   const defaultProcessSteps = [
     { step: "01", title: "Konsultacija", desc: "Razumijevanje vaših zahtjeva i vizije projekta", icon: <MessageSquare className="w-5 h-5" /> },
     { step: "02", title: "Dizajn", desc: "Profesionalna izrada dizajna i prepress priprema", icon: <Palette className="w-5 h-5" /> },
@@ -265,10 +269,10 @@ export default async function ProductItemPage({
                   {item.description}
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  {ip?.aboutParagraph1 || 'Naš tim stručnjaka koristi najmodernije tehnologije i materijale kako bi vaš projekat bio realiziran na profesionalnom nivou. Svaki projekat tretiramo sa posebnom pažnjom i prilagođavamo ga vašim specifičnim potrebama.'}
+                  {(item as any).longDescription1 || ip?.aboutParagraph1 || 'Naš tim stručnjaka koristi najmodernije tehnologije i materijale kako bi vaš projekat bio realiziran na profesionalnom nivou. Svaki projekat tretiramo sa posebnom pažnjom i prilagođavamo ga vašim specifičnim potrebama.'}
                 </p>
                 <p className="text-gray-600 leading-relaxed">
-                  {ip?.aboutParagraph2 || 'Od početne ideje do finalne realizacije, osiguravamo da svaki detalj bude savršen. Nudimo kompletnu uslugu — od dizajna i pripreme, preko produkcije, pa sve do montaže i isporuke na lokaciju.'}
+                  {(item as any).longDescription2 || ip?.aboutParagraph2 || 'Od početne ideje do finalne realizacije, osiguravamo da svaki detalj bude savršen. Nudimo kompletnu uslugu — od dizajna i pripreme, preko produkcije, pa sve do montaže i isporuke na lokaciju.'}
                 </p>
 
                 {/* USP grid */}

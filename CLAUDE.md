@@ -108,3 +108,21 @@ POST /api/globals/{slug}?locale={bs|en}            — Update data
    - **Database updated:** Both BS and EN locales via Payload API → `homepage` global → `clientsSection.clients` array
    - **Seed updated:** `src/seed.ts` — BS and EN homepage clientsSection updated, Orbico renamed to Orbico Beauty
    - **Component updated:** `src/components/sections/ClientsSection.tsx` — defaultClients updated with 9 new partners
+
+10. **Supabase Storage Integration — Full Migration** — All media now stored and served from Supabase Storage bucket `bsc_slike` via a custom Payload CMS storage adapter. No more 1x1 pixel placeholder PNGs or `externalUrl` hack.
+    - **Custom adapter created:** `src/plugins/supabaseStorage.ts` — wraps `@payloadcms/plugin-cloud-storage` with Supabase REST API for upload, delete, URL generation, and static file redirect. Uses `disablePayloadAccessControl: true` and `disableLocalStorage: true`.
+    - **Payload config updated:** `payload.config.ts` — added `supabaseStorage({ collections: { media: true } })` plugin
+    - **Media collection updated:** `src/collections/Media.ts` — removed `staticDir: 'public/media'` (adapter handles storage). `externalUrl` field kept but hidden via `condition` for backward compatibility.
+    - **572 media entries migrated:** All entries now have real image files in Supabase bucket with correct dimensions. 0 entries with `externalUrl`, 0 with 1x1 dimensions.
+    - **Upload/Delete verified:** New uploads go directly to Supabase bucket, deletes remove from both DB and bucket. CMS admin shows real thumbnails.
+    - **Seed updated:** `src/seed.ts` — `m()` helper now downloads real images from Supabase and uploads through Payload API (adapter stores in bucket). Falls back to 1x1 placeholder only if download fails.
+    - **Dependencies:** `@payloadcms/plugin-cloud-storage@3.79.0` (direct dep, used by adapter). `@payloadcms/storage-s3@3.79.0` installed but NOT used (S3 protocol unavailable on self-hosted Supabase — no HMAC keys).
+    - **Key config:** Supabase URL: `https://bsc.deployer3000.halvooo.com`, Bucket: `bsc_slike` (public), Auth: service_role JWT in adapter
+
+### 2026-03-17
+
+11. **Per-Item Editable Descriptions & Features** — Product and material detail pages now support per-item long descriptions and feature cards, with 3-tier fallback (item → global template → hardcoded default)
+    - **Collections updated:** `src/collections/ProductItems.ts` and `src/collections/MaterialItems.ts` — added `longDescription1` and `longDescription2` (textarea, localized, optional) fields for per-item extended descriptions
+    - **Detail pages updated:** `src/app/(frontend)/products/[slug]/[item]/page.tsx` and `src/app/(frontend)/materials/[slug]/[item]/page.tsx` — item data mapping now includes `longDescription1`, `longDescription2`, and `itemFeatures[]`. Rendering uses item-level fields first, then global detail page template, then hardcoded defaults
+    - **Type interfaces updated:** `src/data/products.ts` (`ProductItem`) and `src/data/materials.ts` (`MaterialItem`) — added optional `longDescription1`, `longDescription2`, and `itemFeatures` fields
+    - **Architecture doc created:** `ARCHITECTURE.md` — comprehensive documentation of site↔Payload↔Supabase relationships, data flow, collections, globals, routing, fallback chains, and tech stack

@@ -10,7 +10,7 @@ import "../globals.css";
 
 const poppins = Poppins({
   variable: "--font-poppins",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
@@ -55,6 +55,9 @@ export default async function FrontendLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <meta charSet="utf-8" />
+      </head>
       <body className={`${poppins.variable} antialiased font-sans`} suppressHydrationWarning>
         <Navbar data={navigationData} siteSettings={siteSettings} locale={locale} />
         <main className="pt-[80px] bg-white">{children}</main>

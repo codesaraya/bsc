@@ -4,6 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { supabaseStorage } from './src/plugins/supabaseStorage'
 
 import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
@@ -14,7 +15,6 @@ import { ProductCategories } from './src/collections/ProductCategories'
 import { ProductItems } from './src/collections/ProductItems'
 import { NewsArticles } from './src/collections/NewsArticles'
 import { GalleryImages } from './src/collections/GalleryImages'
-import { Pages } from './src/collections/Pages'
 import { Homepage } from './src/globals/Homepage'
 import { SiteSettings } from './src/globals/SiteSettings'
 import { Navigation } from './src/globals/Navigation'
@@ -57,7 +57,6 @@ export default buildConfig({
     ProductItems,
     NewsArticles,
     GalleryImages,
-    Pages,
   ],
   globals: [
     Homepage,
@@ -86,5 +85,11 @@ export default buildConfig({
     push: true,
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    supabaseStorage({
+      collections: {
+        media: true,
+      },
+    }),
+  ],
 })

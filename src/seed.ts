@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import { getMaterialGalleryPhotos, getProductGalleryPhotos } from './data/galleryImages'
 
 /**
  * Recursively inject `id` values from bsData into enData so that
@@ -41,17 +42,61 @@ async function seed() {
   console.log('🌱 Starting comprehensive seed...')
 
   // ──────────────────────────────────────────────
-  // MEDIA HELPER — create media entries with externalUrl
+  // MEDIA HELPER — create media entries uploaded to Supabase
   // ──────────────────────────────────────────────
   const mediaCache = new Map<string, number>()
-  // 1x1 transparent PNG placeholder (68 bytes)
-  const PIXEL = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
+  const SUPABASE_STORAGE_BASE = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/bsc_slike`
+
+  function transliterate(str: string): string {
+    return str
+      .replace(/[žŽ]/g, 'z')
+      .replace(/[šŠ]/g, 's')
+      .replace(/[čČ]/g, 'c')
+      .replace(/[ćĆ]/g, 'c')
+      .replace(/[đĐ]/g, 'dj')
+  }
+
+  function toSupabaseUrl(localPath: string): string {
+    if (localPath.startsWith('http')) return localPath
+    const decoded = decodeURIComponent(localPath.startsWith('/') ? localPath.slice(1) : localPath)
+    const transliterated = transliterate(decoded)
+    const encoded = transliterated.split('/').map(s => encodeURIComponent(s)).join('/')
+    return `${SUPABASE_STORAGE_BASE}/${encoded}`
+  }
+
   async function m(path: string, alt?: string): Promise<number> {
     if (mediaCache.has(path)) return mediaCache.get(path)!
+    const altText = alt || decodeURIComponent(path.split('/').pop()?.replace(/\.[^.]+$/, '') || 'Image').replace(/%20/g, ' ')
+
+    // Try to download the real image from Supabase
+    let fileData: Buffer
+    let mimetype = 'image/jpeg'
+    let filename: string
+    try {
+      const url = toSupabaseUrl(path)
+      const res = await fetch(url)
+      if (res.ok) {
+        fileData = Buffer.from(await res.arrayBuffer())
+        mimetype = res.headers.get('content-type') || 'image/jpeg'
+        filename = `seed-${mediaCache.size}-${transliterate(decodeURIComponent(path.split('/').pop() || 'img.jpg')).replace(/\s+/g, '-').toLowerCase()}`
+      } else {
+        // Fallback: 1x1 placeholder with externalUrl
+        const PIXEL = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
+        fileData = PIXEL
+        mimetype = 'image/png'
+        filename = `ph-${mediaCache.size}.png`
+      }
+    } catch {
+      const PIXEL = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
+      fileData = PIXEL
+      mimetype = 'image/png'
+      filename = `ph-${mediaCache.size}.png`
+    }
+
     const doc = await payload.create({
       collection: 'media',
-      data: { alt: alt || path.split('/').pop()?.replace(/\.[^.]+$/, '').replace(/%20/g, ' ') || 'Image', externalUrl: path } as any,
-      file: { data: PIXEL, mimetype: 'image/png', name: `ph-${mediaCache.size}.png`, size: PIXEL.length },
+      data: { alt: altText } as any,
+      file: { data: fileData, mimetype, name: filename, size: fileData.length },
     })
     mediaCache.set(path, doc.id as number)
     return doc.id as number
@@ -2274,7 +2319,12 @@ async function seed() {
     enDesc: string,
     image: string,
     sortOrder: number,
+    categorySlug?: string,
   ) {
+    const galleryPhotos = categorySlug ? getMaterialGalleryPhotos(categorySlug, slug) : []
+    const galleryImages = galleryPhotos.length > 0
+      ? await Promise.all(galleryPhotos.map(async (p) => ({ uploadedImage: await m(p) })))
+      : undefined
     const doc = await payload.create({
       collection: 'material-items',
       data: {
@@ -2284,6 +2334,7 @@ async function seed() {
         description: bsDesc,
         uploadedImage: await m(image, bsName),
         sortOrder,
+        ...(galleryImages ? { galleryImages } : {}),
       },
     })
     await payload.update({
@@ -2303,55 +2354,55 @@ async function seed() {
     'PVC Naljepnice', 'PVC Stickers', 'pvc-naljepnice', matCat1.id,
     'Vinil naljepnice za unutrašnju i vanjsku upotrebu sa dugotrajnom postojanošću boja.',
     'Vinyl stickers for indoor and outdoor use with long-lasting color durability.',
-    '/Materials/PVC%20Naljepnice/pvc%20naljepnice1.jpg', 1,
+    '/Materials/PVC%20Naljepnice/pvc%20naljepnice1.jpg', 1, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'One Way Vision', 'One Way Vision', 'one-way-vision', matCat1.id,
     'Perforirani materijal za stakla koji omogućava pogled iznutra, a reklamnu poruku izvana.',
     'Perforated material for glass that allows interior visibility while displaying advertising outside.',
-    '/Materials/One%20Way%20Vision/one%20way%20vision1.jpg', 2,
+    '/Materials/One%20Way%20Vision/one%20way%20vision1.jpg', 2, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Back Light', 'Back Light', 'back-light', matCat1.id,
     'Translucenti materijal za osvjetljene reklame i svjetlosne kutije.',
     'Translucent material for illuminated signs and light boxes.',
-    '/Materials/Back%20Light/back%20light1.jpg', 3,
+    '/Materials/Back%20Light/back%20light1.jpg', 3, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Banner / Textilni Banner / Flag', 'Banner / Textile Banner / Flag', 'banner-textilni-banner-flag', matCat1.id,
     'Izdržljivi banneri i zastave za vanjsku i unutrašnju reklamu.',
     'Durable banners and flags for outdoor and indoor advertising.',
-    '/Materials/Banner%20%20Textilni%20Banner%20%20Flag/banner%20%20textilni%20banner%20%20flag1.jpg', 4,
+    '/Materials/Banner%20%20Textilni%20Banner%20%20Flag/banner%20%20textilni%20banner%20%20flag1.jpg', 4, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Cerade / Kamionske', 'Tarpaulins / Truck Covers', 'cerade-kamionske', matCat1.id,
     'Robusne cerade za kamione i industrijske primjene.',
     'Robust tarpaulins for trucks and industrial applications.',
-    '/Materials/Cerade%20Kamionske/cerade%20kamionske1.jpg', 5,
+    '/Materials/Cerade%20Kamionske/cerade%20kamionske1.jpg', 5, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Canvas', 'Canvas', 'canvas', matCat1.id,
     'Platno za umjetničke reprodukcije i dekorativne aplikacije.',
     'Canvas for art reproductions and decorative applications.',
-    '/Materials/Canvas/canvas1.jpg', 6,
+    '/Materials/Canvas/canvas1.jpg', 6, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Tapete', 'Wallpapers', 'tapete', matCat1.id,
     'Prilagođene tapete za personaliziranu dekoraciju prostora.',
     'Custom wallpapers for personalized space decoration.',
-    '/Materials/Tapete/tapete1.jpg', 7,
+    '/Materials/Tapete/tapete1.jpg', 7, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Podna Grafika', 'Floor Graphics', 'podna-grafika', matCat1.id,
     'Otporne grafike za podove sa protukliznom površinom.',
     'Durable floor graphics with anti-slip surface.',
-    '/Materials/Podna%20Grafika/podna%20grafika1.jpg', 8,
+    '/Materials/Podna%20Grafika/podna%20grafika1.jpg', 8, 'uv-ecosolvent-latex',
   )
   await createMaterialItem(
     'Poster Papir', 'Poster Paper', 'poster-papir', matCat1.id,
     'Visokokvalitetni papir za postere i plakate.',
     'High-quality paper for posters and placards.',
-    '/Materials/Poster%20Papir/poster%20papir1.jpg', 9,
+    '/Materials/Poster%20Papir/poster%20papir1.jpg', 9, 'uv-ecosolvent-latex',
   )
 
   // --- UV Direktni Print items (7) ---
@@ -2359,43 +2410,43 @@ async function seed() {
     'Staklo', 'Glass', 'staklo', matCat2.id,
     'Direktan UV print na staklo za dekorativne i funkcionalne primjene.',
     'Direct UV printing on glass for decorative and functional applications.',
-    '/Materials/Staklo/staklo.jpg', 1,
+    '/Materials/Staklo/staklo.jpg', 1, 'uv-direktni-print',
   )
   await createMaterialItem(
     'Drvo', 'Wood', 'drvo', matCat2.id,
     'UV print na drvene površine za jedinstvene dekorativne efekte.',
     'UV printing on wooden surfaces for unique decorative effects.',
-    '/Materials/Drvo/Drvo.jpg', 2,
+    '/Materials/Drvo/Drvo.jpg', 2, 'uv-direktni-print',
   )
   await createMaterialItem(
     'Forex', 'Forex', 'forex', matCat2.id,
     'Lagane PVC ploče idealne za unutrašnju signalizaciju i reklamu.',
     'Lightweight PVC boards ideal for indoor signage and advertising.',
-    '/Materials/Forex/forex.jpg', 3,
+    '/Materials/Forex/forex.jpg', 3, 'uv-direktni-print',
   )
   await createMaterialItem(
     'Plexiglass', 'Plexiglass', 'plexiglass', matCat2.id,
     'Transparentne akrilne ploče za elegantna i moderna rješenja.',
     'Transparent acrylic panels for elegant and modern solutions.',
-    '/Materials/Plexiglass/plexiglass.jpg', 4,
+    '/Materials/Plexiglass/plexiglass.jpg', 4, 'uv-direktni-print',
   )
   await createMaterialItem(
     'Kapaline', 'Kapaline', 'kapaline', matCat2.id,
     'Lagane pjenaste ploče idealne za POS materijale i izložbe.',
     'Lightweight foam boards ideal for POS materials and exhibitions.',
-    '/Materials/Kapaline/kapaline.jpg', 5,
+    '/Materials/Kapaline/kapaline.jpg', 5, 'uv-direktni-print',
   )
   await createMaterialItem(
     'Alu Bond', 'Alu Bond', 'alu-bond', matCat2.id,
     'Aluminijske kompozitne ploče za profesionalnu vanjsku signalizaciju.',
     'Aluminium composite panels for professional outdoor signage.',
-    '/Materials/Alu%20Bond/alu%20bond1.jpg', 6,
+    '/Materials/Alu%20Bond/alu%20bond1.jpg', 6, 'uv-direktni-print',
   )
   await createMaterialItem(
     'MDF', 'MDF', 'mdf', matCat2.id,
     'Srednje gustoća vlaknatica za unutrašnju dekoraciju i signalizaciju.',
     'Medium-density fiberboard for interior decoration and signage.',
-    '/Materials/MDF/mdf.jpg', 7,
+    '/Materials/MDF/mdf.jpg', 7, 'uv-direktni-print',
   )
 
   // --- CNC items (9) ---
@@ -2403,55 +2454,55 @@ async function seed() {
     'MDF', 'MDF', 'cnc-mdf', matCat3.id,
     'CNC obrada MDF ploča za precizne oblike i detalje.',
     'CNC processing of MDF boards for precise shapes and details.',
-    '/Materials/MDF/mdf.jpg', 1,
+    '/Materials/MDF/mdf.jpg', 1, 'cnc',
   )
   await createMaterialItem(
     'Iverica', 'Chipboard', 'iverica', matCat3.id,
     'CNC rezanje iverice za namještaj i unutrašnje obrade.',
     'CNC cutting of chipboard for furniture and interior applications.',
-    '/Materials/Iverica/iverica.jpg', 2,
+    '/Materials/Iverica/iverica.jpg', 2, 'cnc',
   )
   await createMaterialItem(
     'Špera', 'Plywood', 'spera', matCat3.id,
     'CNC obrada šperploča za strukturalne i dekorativne elemente.',
     'CNC processing of plywood for structural and decorative elements.',
-    '/Materials/%C5%A0pera%20Drvo/%C5%A1pera1.jpg', 3,
+    '/Materials/%C5%A0pera%20Drvo/%C5%A1pera1.jpg', 3, 'cnc',
   )
   await createMaterialItem(
     'Aluminij', 'Aluminium', 'aluminij', matCat3.id,
     'Precizno CNC rezanje aluminijuma za industrijske i reklamne primjene.',
     'Precision CNC cutting of aluminium for industrial and advertising applications.',
-    '/Materials/Aluminijum/aluminijum1.png', 4,
+    '/Materials/Aluminijum/aluminijum1.png', 4, 'cnc',
   )
   await createMaterialItem(
     'Forex / Plastika', 'Forex / Plastic', 'forex-plastika', matCat3.id,
     'CNC obrada Forexa i plastičnih materijala za signalizaciju.',
     'CNC processing of Forex and plastic materials for signage.',
-    '/Materials/Forex/forex.jpg', 5,
+    '/Materials/Forex/forex.jpg', 5, 'cnc',
   )
   await createMaterialItem(
     'Plexiglass', 'Plexiglass', 'cnc-plexiglass', matCat3.id,
     'Precizno CNC rezanje plexiglasa za dekorativne i funkcionalne elemente.',
     'Precision CNC cutting of plexiglass for decorative and functional elements.',
-    '/Materials/Plexiglass/plexiglass.jpg', 6,
+    '/Materials/Plexiglass/plexiglass.jpg', 6, 'cnc',
   )
   await createMaterialItem(
     'Medijapan', 'MDF Board', 'medijapan', matCat3.id,
     'CNC obrada medijapana za unutrašnju dekoraciju i oblikovanje.',
     'CNC processing of MDF board for interior decoration and shaping.',
-    '/Materials/Medijapan/medijapan1.jpg', 7,
+    '/Materials/Medijapan/medijapan1.jpg', 7, 'cnc',
   )
   await createMaterialItem(
     'Drvo', 'Wood', 'cnc-drvo', matCat3.id,
     'CNC rezanje i oblikovanje drveta za razne projekte.',
     'CNC cutting and shaping of wood for various projects.',
-    '/Materials/Drvo/Drvo.jpg', 8,
+    '/Materials/Drvo/Drvo.jpg', 8, 'cnc',
   )
   await createMaterialItem(
     'Plastični Karton / Akyplac', 'Plastic Cardboard / Akyplac', 'plasticni-karton-akyplac', matCat3.id,
     'CNC obrada plastičnog kartona za reklamne i POS materijale.',
     'CNC processing of plastic cardboard for advertising and POS materials.',
-    '/Materials/Plasti%C4%8Dni%20Karton%20Akyplac/plasti%C4%8Dni%20karton%20akyplac1.jpg', 9,
+    '/Materials/Plasti%C4%8Dni%20Karton%20Akyplac/plasti%C4%8Dni%20karton%20akyplac1.jpg', 9, 'cnc',
   )
 
   // --- Laser items (4) ---
@@ -2459,25 +2510,25 @@ async function seed() {
     'Plexiglass', 'Plexiglass', 'laser-plexiglass', matCat4.id,
     'Lasersko graviranje i rezanje plexiglasa za elegantne proizvode.',
     'Laser engraving and cutting of plexiglass for elegant products.',
-    '/Materials/Plexiglass/plexiglass.jpg', 2,
+    '/Materials/Plexiglass/plexiglass.jpg', 2, 'laser',
   )
   await createMaterialItem(
     'Koža', 'Leather', 'koza', matCat4.id,
     'Lasersko graviranje na koži za personalizirane proizvode.',
     'Laser engraving on leather for personalized products.',
-    '/Materials/Ko%C5%BEa/ko%C5%BEa1.jpg', 3,
+    '/Materials/Ko%C5%BEa/ko%C5%BEa1.jpg', 3, 'laser',
   )
   await createMaterialItem(
     'Papir / Karton', 'Paper / Cardboard', 'papir-karton', matCat4.id,
     'Precizno lasersko rezanje papira i kartona za složene oblike.',
     'Precision laser cutting of paper and cardboard for complex shapes.',
-    '/Materials/Karton/karton.jpg', 4,
+    '/Materials/Karton/karton.jpg', 4, 'laser',
   )
   await createMaterialItem(
     'Špera / Drvo', 'Plywood / Wood', 'spera-drvo', matCat4.id,
     'Lasersko graviranje i rezanje šperploča i drveta.',
     'Laser engraving and cutting of plywood and wood.',
-    '/Materials/%C5%A0pera%20Drvo/%C5%A1pera.jpg', 5,
+    '/Materials/%C5%A0pera%20Drvo/%C5%A1pera.jpg', 5, 'laser',
   )
 
   // ──────────────────────────────────────────────
@@ -2494,7 +2545,12 @@ async function seed() {
     enDesc: string,
     image: string,
     sortOrder: number,
+    categorySlug?: string,
   ) {
+    const galleryPhotos = categorySlug ? getProductGalleryPhotos(categorySlug, slug) : []
+    const galleryImages = galleryPhotos.length > 0
+      ? await Promise.all(galleryPhotos.map(async (p) => ({ uploadedImage: await m(p) })))
+      : undefined
     const doc = await payload.create({
       collection: 'product-items',
       data: {
@@ -2504,6 +2560,7 @@ async function seed() {
         description: bsDesc,
         uploadedImage: await m(image, bsName),
         sortOrder,
+        ...(galleryImages ? { galleryImages } : {}),
       },
     })
     await payload.update({
@@ -2523,25 +2580,25 @@ async function seed() {
     'Brendiranje Poslovnih Prostora', 'Business Space Branding', 'poslovnih-stambenih-prostora', prodCat1.id,
     'Kompletno brendiranje poslovnih i stambenih prostora sa profesionalnim dizajnom.',
     'Complete branding of business and residential spaces with professional design.',
-    '/Products/Brendiranje%20Poslovnih%20Prostora/Brendiranje%20poslovnih%20prostora1.jpg', 1,
+    '/Products/Brendiranje%20Poslovnih%20Prostora/Brendiranje%20poslovnih%20prostora1.jpg', 1, 'brendiranje',
   )
   await createProductItem(
     'Brendiranje Vozila', 'Vehicle Branding', 'vozila', prodCat1.id,
     'Profesionalno brendiranje vozila sa dugotrajnim materijalima.',
     'Professional vehicle branding with durable materials.',
-    '/Products/Brandiranje%20Vozila/brandiranje%20vozila1.jpg', 2,
+    '/Products/Brandiranje%20Vozila/brandiranje%20vozila1.jpg', 2, 'brendiranje',
   )
   await createProductItem(
     'Brendiranje Predmeta', 'Object Branding', 'predmeta', prodCat1.id,
     'Personalizacija predmeta i reklamnih materijala sa vašim brendom.',
     'Personalization of objects and promotional materials with your brand.',
-    '/Products/Brendiranje%20Predmeta/Brendiranje%20predmeta1.jpg', 3,
+    '/Products/Brendiranje%20Predmeta/Brendiranje%20predmeta1.jpg', 3, 'brendiranje',
   )
   await createProductItem(
     'Brendiranje Stajališta', 'Bus Stop Branding', 'stajalista', prodCat1.id,
     'Brendiranje autobuskih stajališta za maksimalnu vidljivost reklame.',
     'Bus stop branding for maximum advertising visibility.',
-    '/Products/Brendiranje%20Stajali%C5%A1ta/brendiranje%20stajali%C5%A1ta1.jpg', 4,
+    '/Products/Brendiranje%20Stajali%C5%A1ta/brendiranje%20stajali%C5%A1ta1.jpg', 4, 'brendiranje',
   )
 
   // --- Outdoor / Indoor items (7) ---
@@ -2549,43 +2606,43 @@ async function seed() {
     'Wallscape', 'Wallscape', 'wallscape', prodCat2.id,
     'Velikoformatne zidne reklame za maksimalni vizuelni impakt.',
     'Large format wall advertisements for maximum visual impact.',
-    '/Products/Wallscape/wallscape.jpg', 1,
+    '/Products/Wallscape/wallscape.jpg', 1, 'outdoor-indoor',
   )
   await createProductItem(
     'Bilbord', 'Billboard', 'billboard', prodCat2.id,
     'Profesionalni bilbordi za efikasno oglašavanje na otvorenom.',
     'Professional billboards for effective outdoor advertising.',
-    '/Products/Bilbord/bilbord.jpg', 2,
+    '/Products/Bilbord/bilbord.jpg', 2, 'outdoor-indoor',
   )
   await createProductItem(
     'Banneri', 'Banners', 'banneri', prodCat2.id,
     'Izdržljivi i kvalitetni banneri za unutrašnju i vanjsku upotrebu.',
     'Durable and high-quality banners for indoor and outdoor use.',
-    '/Products/Banneri/banneri.jpg', 3,
+    '/Products/Banneri/banneri.jpg', 3, 'outdoor-indoor',
   )
   await createProductItem(
     'Cerade Kamionske', 'Truck Tarpaulins', 'cerade-kamionske', prodCat2.id,
     'Robusne kamionske cerade sa custom printom.',
     'Robust truck tarpaulins with custom printing.',
-    '/Products/Cerade%20Kamionske/cerade%20kamionske1.jpg', 4,
+    '/Products/Cerade%20Kamionske/cerade%20kamionske1.jpg', 4, 'outdoor-indoor',
   )
   await createProductItem(
     'Mesh', 'Mesh', 'mesh', prodCat2.id,
     'Propusne mesh mreže za velikoformatne reklame na fasadama.',
     'Breathable mesh nets for large format advertisements on facades.',
-    '/Products/Mesh/mesh.jpg', 5,
+    '/Products/Mesh/mesh.jpg', 5, 'outdoor-indoor',
   )
   await createProductItem(
     'City Light', 'City Light', 'city-light', prodCat2.id,
     'Iluminirani reklamni paneli za gradske sredine.',
     'Illuminated advertising panels for urban environments.',
-    '/Products/City%20Light/city%20light1.jpg', 6,
+    '/Products/City%20Light/city%20light1.jpg', 6, 'outdoor-indoor',
   )
   await createProductItem(
     'Svijetleća Reklama', 'Light-up Signage', 'svijetlece-reklame', prodCat2.id,
     'Svijetleće reklame i svjetlosni natpisi za poslovne prostore.',
     'Light-up signage and illuminated signs for business premises.',
-    '/Products/Svijetle%C4%87a%20Reklama/svijetle%C4%87a%20reklama1.png', 7,
+    '/Products/Svijetle%C4%87a%20Reklama/svijetle%C4%87a%20reklama1.png', 7, 'outdoor-indoor',
   )
 
   // --- Home & Office items (7) ---
@@ -2593,43 +2650,43 @@ async function seed() {
     'Home Dekor', 'Home Decor', 'home-dekor-assesoar', prodCat3.id,
     'Dekorativni elementi za personalizaciju vašeg doma.',
     'Decorative elements for personalizing your home.',
-    '/Products/Home%20Dekor/home%20dekor1.jpg', 1,
+    '/Products/Home%20Dekor/home%20dekor1.jpg', 1, 'home-and-office',
   )
   await createProductItem(
     'Wall Art', 'Wall Art', 'wall-art', prodCat3.id,
     'Umjetničke zidne dekoracije visokog kvaliteta.',
     'High-quality artistic wall decorations.',
-    '/Products/Wall%20Art/wall%20art1.jpg', 2,
+    '/Products/Wall%20Art/wall%20art1.jpg', 2, 'home-and-office',
   )
   await createProductItem(
     '3D Zidni Paneli', '3D Wall Panels', '3d-zidni-paneli', prodCat3.id,
     'Trodimenzionalni zidni paneli za moderan izgled prostora.',
     'Three-dimensional wall panels for a modern look.',
-    '/Products/3D%20zidni%20paneli/3dzidni1.jpg', 3,
+    '/Products/3D%20zidni%20paneli/3dzidni1.jpg', 3, 'home-and-office',
   )
   await createProductItem(
     'Pregrade', 'Partitions', 'pregrade', prodCat3.id,
     'Funkcionalne i dekorativne pregrade za poslovne prostore.',
     'Functional and decorative partitions for business spaces.',
-    '/Products/Pregrade/pregrade.jpg', 4,
+    '/Products/Pregrade/pregrade.jpg', 4, 'home-and-office',
   )
   await createProductItem(
     'Informativne Oznake', 'Informational Signs', 'informativne-oznake', prodCat3.id,
     'Profesionalne informativne oznake za poslovne prostore i javne objekte.',
     'Professional informational signs for business premises and public buildings.',
-    '/Products/Informativne%20Oznake/informativne%20oznake1.jpg', 5,
+    '/Products/Informativne%20Oznake/informativne%20oznake1.jpg', 5, 'home-and-office',
   )
   await createProductItem(
     'Info Display', 'Info Display', 'info-display', prodCat3.id,
     'Info displayi i stalci za prezentacije i izložbe.',
     'Info displays and stands for presentations and exhibitions.',
-    '/Products/Info%20Display/info%20display1.jpg', 6,
+    '/Products/Info%20Display/info%20display1.jpg', 6, 'home-and-office',
   )
   await createProductItem(
     'Kancelarijski Materijali', 'Office Supplies', 'kancelarijski-materijal', prodCat3.id,
     'Brendirani kancelarijski materijali za profesionalan poslovni identitet.',
     'Branded office supplies for a professional business identity.',
-    '/Products/Kancelarijski%20Materijali/kancelarijski%20materijali1.jpg', 7,
+    '/Products/Kancelarijski%20Materijali/kancelarijski%20materijali1.jpg', 7, 'home-and-office',
   )
 
   // --- Promo / POS items (6) ---
@@ -2637,37 +2694,37 @@ async function seed() {
     'Štandovi', 'Stands', 'standovi', prodCat4.id,
     'Profesionalni promotivni štandovi za sajmove i prezentacije.',
     'Professional promotional stands for fairs and presentations.',
-    '/Products/%C5%A0tandovi/%C5%A1tandovi1.jpg', 1,
+    '/Products/%C5%A0tandovi/%C5%A1tandovi1.jpg', 1, 'promo-pos',
   )
   await createProductItem(
     'Plex Stalaže', 'Plex Shelves', 'plex', prodCat4.id,
     'Plexiglass stalaže za atraktivno izlaganje proizvoda.',
     'Plexiglass shelves for attractive product display.',
-    '/Products/Plex%20Stala%C5%BEe/plex%20stalaze1.jpg', 2,
+    '/Products/Plex%20Stala%C5%BEe/plex%20stalaze1.jpg', 2, 'promo-pos',
   )
   await createProductItem(
     'Sajamski Elementi', 'Exhibition Elements', 'sajamski-elementi', prodCat4.id,
     'Kompletna oprema za sajamske nastupe i izložbe.',
     'Complete equipment for trade show appearances and exhibitions.',
-    '/Products/Sajamski%20Elementi/sajamski%20elementi1.jpg', 3,
+    '/Products/Sajamski%20Elementi/sajamski%20elementi1.jpg', 3, 'promo-pos',
   )
   await createProductItem(
     'Vobleri / Table Tent', 'Wobblers / Table Tent', 'vobleri-table-tent', prodCat4.id,
     'POS materijali za efikasnu promociju na prodajnim mjestima.',
     'POS materials for effective promotion at points of sale.',
-    '/Products/Vobleri%20Table%20Tent/vobleri%20table%20tent1.jpg', 4,
+    '/Products/Vobleri%20Table%20Tent/vobleri%20table%20tent1.jpg', 4, 'promo-pos',
   )
   await createProductItem(
     'Senzormatici', 'Sensormats', 'senzormatici', prodCat4.id,
     'Interaktivne senzormatice za podne reklame i promocije.',
     'Interactive sensormats for floor advertising and promotions.',
-    '/Products/Senzormatici/senzormatici.jpg', 5,
+    '/Products/Senzormatici/senzormatici.jpg', 5, 'promo-pos',
   )
   await createProductItem(
     'Showcard', 'Showcard', 'showcard', prodCat4.id,
     'Kartonski displayi za prezentaciju proizvoda na prodajnim mjestima.',
     'Cardboard displays for product presentation at points of sale.',
-    '/Products/Showcard/showcard.jpg', 6,
+    '/Products/Showcard/showcard.jpg', 6, 'promo-pos',
   )
 
   // ──────────────────────────────────────────────

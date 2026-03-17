@@ -431,12 +431,13 @@ export default function Gallery({
       </div>
 
       {/* ── Thumbnail strip ── */}
-      <div className="flex justify-center gap-2 overflow-x-auto overflow-y-visible pb-4 pt-2">
+      <div className="relative">
+        <div className="flex gap-2 overflow-x-auto pb-4 pt-2 px-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
         {images.map((img, i) => (
           <button
             key={img.id}
             onClick={() => goTo(i)}
-            className={`group relative shrink-0 w-16 h-11 sm:w-24 sm:h-16 md:w-32 md:h-20 rounded-xl overflow-visible cursor-pointer transition-all duration-300 ${
+            className={`group relative shrink-0 w-20 h-14 sm:w-24 sm:h-16 md:w-32 md:h-20 rounded-xl overflow-visible cursor-pointer transition-all duration-300 ${
               i === activeIndex
                 ? "ring-2 ring-offset-2 ring-offset-white ring-gray-900 scale-105 shadow-lg"
                 : "opacity-60 hover:opacity-90 hover:scale-[1.02]"
@@ -473,6 +474,7 @@ export default function Gallery({
             </div>
           </button>
         ))}
+      </div>
       </div>
         </>
       )}
