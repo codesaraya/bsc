@@ -57,7 +57,7 @@ export default async function Home() {
       <MaterialsSection data={{ ...hp?.materialsSection, uiLabels }} />
       <PortfolioSection data={hp?.portfolioSection} />
       <ClientsSection data={hp?.clientsSection} />
-      <StatsPODSection data={hp?.statsSection} />
+      <StatsPODSection data={{ ...hp?.statsSection, uiLabels }} />
       <ProcessStepsSection data={hp?.certificatesSection} />
       <ProductsGrid data={{ ...hp?.productsGrid, uiLabels }} />
       <NewsSection data={{ ...hp?.newsSection, uiLabels }} articles={newsArticles} />

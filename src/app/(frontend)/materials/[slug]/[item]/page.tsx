@@ -63,6 +63,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; item: string }>;
 }): Promise<Metadata> {
   const { slug, item: itemSlug } = await params;
+  let notFoundTitle = 'Nije pronađeno';
 
   try {
     const payload = await getPayload({ config });
@@ -72,6 +73,7 @@ export async function generateMetadata({
       payload.find({ collection: "material-items" as any, where: { slug: { equals: itemSlug } }, limit: 1, locale } as any),
       payload.findGlobal({ slug: 'site-settings' as any, locale } as any).catch(() => null),
     ]);
+    notFoundTitle = (ss as any)?.uiLabels?.notFoundTitle || notFoundTitle;
     const siteName = (ss as any)?.siteName || 'BSC';
     if (catRes.docs.length > 0 && itemRes.docs.length > 0) {
       return {
@@ -84,7 +86,7 @@ export async function generateMetadata({
   }
 
   const result = getStaticMaterialItem(slug, itemSlug);
-  if (!result) return { title: "Nije pronađeno" };
+  if (!result) return { title: notFoundTitle };
   return {
     title: `${result.item.name} - ${result.category.title} - BSC`,
     description: result.item.description,

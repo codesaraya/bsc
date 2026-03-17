@@ -46,6 +46,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  let notFoundTitle = 'Nije pronađeno';
 
   try {
     const payload = await getPayload({ config });
@@ -59,6 +60,7 @@ export async function generateMetadata({
       } as any),
       payload.findGlobal({ slug: 'site-settings' as any, locale } as any).catch(() => null),
     ]);
+    notFoundTitle = (ss as any)?.uiLabels?.notFoundTitle || notFoundTitle;
     const siteName = (ss as any)?.siteName || 'BSC';
     if (res.docs.length > 0) {
       const doc: any = res.docs[0];
@@ -72,7 +74,7 @@ export async function generateMetadata({
   }
 
   const article = getStaticArticleBySlug(slug);
-  if (!article) return { title: "Nije pronađeno" };
+  if (!article) return { title: notFoundTitle };
   return {
     title: `${article.title} - BSC`,
     description: article.excerpt,

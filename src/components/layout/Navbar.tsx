@@ -167,6 +167,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
   const ctaLink = data?.ctaLink || "/contact";
   const logoTop = getImageUrl(siteSettings?.logos?.navbarTopUpload) || "/bsc-logo-white-top.png";
   const logoScrolled = getImageUrl(siteSettings?.logos?.navbarScrolledUpload) || "/bsc-logo-white.png";
+  const logoAlt = siteSettings?.uiLabels?.logoAlt || siteSettings?.siteName || 'BSC - Best Solution Company';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -201,7 +202,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
                 {/* Top-of-page logo (colorful) */}
                 <Image
                   src={logoTop}
-                  alt="BSC - Best Solution Company"
+                  alt={logoAlt}
                   width={160}
                   height={40}
                   className={`h-8 sm:h-9 lg:h-10 w-auto object-contain transition-opacity duration-500 ${
@@ -212,7 +213,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
                 {/* Scrolled logo (white) */}
                 <Image
                   src={logoScrolled}
-                  alt="BSC - Best Solution Company"
+                  alt={logoAlt}
                   width={160}
                   height={40}
                   className={`h-8 sm:h-9 lg:h-10 w-auto object-contain transition-opacity duration-500 ${
@@ -389,7 +390,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
                 <div className="flex items-center justify-between mb-6">
                   <Image
                     src={logoScrolled}
-                    alt="BSC"
+                    alt={logoAlt}
                     width={100}
                     height={28}
                     className="h-7 w-auto object-contain"

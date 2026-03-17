@@ -126,3 +126,12 @@ POST /api/globals/{slug}?locale={bs|en}            — Update data
     - **Detail pages updated:** `src/app/(frontend)/products/[slug]/[item]/page.tsx` and `src/app/(frontend)/materials/[slug]/[item]/page.tsx` — item data mapping now includes `longDescription1`, `longDescription2`, and `itemFeatures[]`. Rendering uses item-level fields first, then global detail page template, then hardcoded defaults
     - **Type interfaces updated:** `src/data/products.ts` (`ProductItem`) and `src/data/materials.ts` (`MaterialItem`) — added optional `longDescription1`, `longDescription2`, and `itemFeatures` fields
     - **Architecture doc created:** `ARCHITECTURE.md` — comprehensive documentation of site↔Payload↔Supabase relationships, data flow, collections, globals, routing, fallback chains, and tech stack
+
+12. **All Disconnected Text Connected to CMS** — Comprehensive audit found 8 hardcoded strings not connected to the database. All fixed with new `uiLabels` fields in `site-settings` global.
+    - **SiteSettings global updated:** `src/globals/SiteSettings.ts` — added 8 new localized fields to `uiLabels` group: `logoAlt`, `notFoundTitle`, `locationAddress`, `locationPhone`, `locationViber`, `locationEmail`, `locationWorkingHours`, `locationGoogleMaps`
+    - **StatsPODSection fixed:** `src/components/sections/StatsPODSection.tsx` — 6 hardcoded labels ("Adresa", "Telefon", "Viber", "Email", "Radno vrijeme", "Google Maps") now read from `uiLabels` via data prop with fallback defaults
+    - **Homepage updated:** `src/app/(frontend)/page.tsx` — now passes `uiLabels` to `StatsPODSection` via spread: `data={{ ...hp?.statsSection, uiLabels }}`
+    - **Navbar fixed:** `src/components/layout/Navbar.tsx` — 3 hardcoded `"BSC - Best Solution Company"` alt texts replaced with `siteSettings?.uiLabels?.logoAlt` with fallback chain
+    - **Detail pages fixed (5 files):** `"Nije pronađeno"` 404 meta title now reads from `uiLabels.notFoundTitle` in `news/[slug]`, `materials/[slug]`, `products/[slug]`, `materials/[slug]/[item]`, `products/[slug]/[item]`
+    - **Database updated:** Both BS and EN locales via Payload API → `site-settings` global → `uiLabels` with proper translations (BS: "Adresa"/"Telefon"/"Radno vrijeme"/"Nije pronađeno", EN: "Address"/"Phone"/"Working hours"/"Not found")
+    - **Seed updated:** `src/seed.ts` — both BS and EN site-settings data include all 8 new uiLabels fields

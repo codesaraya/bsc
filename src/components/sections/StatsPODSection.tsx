@@ -166,6 +166,14 @@ export default function StatsPODSection({ data }: { data?: any }) {
   const locationsHeadingLine2 = data?.locationsHeadingLine2 || "Na tri lokacije";
   const starburstText = data?.starburstText || "Kvalitetna Štampa";
 
+  const uiLabels = data?.uiLabels || {};
+  const labelAddress = uiLabels.locationAddress || 'Adresa';
+  const labelPhone = uiLabels.locationPhone || 'Telefon';
+  const labelViber = uiLabels.locationViber || 'Viber';
+  const labelEmail = uiLabels.locationEmail || 'Email';
+  const labelWorkingHours = uiLabels.locationWorkingHours || 'Radno vrijeme';
+  const labelGoogleMaps = uiLabels.locationGoogleMaps || 'Google Maps';
+
   const [activeLocation, setActiveLocation] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -294,7 +302,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Adresa</p>
+                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{labelAddress}</p>
                           <p className="text-[11px] sm:text-[12px] text-dark font-medium leading-snug">{infoItems[activeLocation].address}</p>
                           {infoItems[activeLocation]?.mapUrl && (
                             <a
@@ -304,7 +312,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                               className="inline-flex items-center gap-1.5 text-primary hover:text-primary/80 font-semibold text-[10px] sm:text-[11px] transition-colors mt-1.5"
                             >
                               <ExternalLink className="w-3 h-3" />
-                              Google Maps
+                              {labelGoogleMaps}
                             </a>
                           )}
                         </div>
@@ -316,7 +324,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-500" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Telefon</p>
+                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{labelPhone}</p>
                           <a href={`tel:${infoItems[activeLocation].phone}`} className="text-[11px] sm:text-[12px] text-dark font-medium hover:text-primary transition-colors">{infoItems[activeLocation].phone}</a>
                         </div>
                       </div>
@@ -327,7 +335,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-500" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Viber</p>
+                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{labelViber}</p>
                           <a href={`viber://chat?number=${infoItems[activeLocation].viber?.replace(/[^0-9+]/g, '')}`} className="text-[11px] sm:text-[12px] text-dark font-medium hover:text-purple-500 transition-colors">{infoItems[activeLocation].viber}</a>
                         </div>
                       </div>
@@ -338,7 +346,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-pink-500" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Email</p>
+                          <p className="text-[9px] sm:text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">{labelEmail}</p>
                           <a href={`mailto:${infoItems[activeLocation].email}`} className="text-[11px] sm:text-[12px] text-dark font-medium hover:text-pink-500 transition-colors">{infoItems[activeLocation].email}</a>
                         </div>
                       </div>
@@ -353,7 +361,7 @@ export default function StatsPODSection({ data }: { data?: any }) {
                           <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-primary/20 flex items-center justify-center">
                             <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary" />
                           </div>
-                          <h4 className="text-white font-bold text-[12px] sm:text-[13px]">Radno vrijeme</h4>
+                          <h4 className="text-white font-bold text-[12px] sm:text-[13px]">{labelWorkingHours}</h4>
                         </div>
                         <div className="flex flex-col gap-1.5">
                           {infoItems[activeLocation].workingHours.map((wh: any, i: number) => (
