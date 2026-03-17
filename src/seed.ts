@@ -117,7 +117,6 @@ async function seed() {
     'users',
     'media',
     'documents',
-    'pages',
   ] as const
 
   for (const slug of collections) {
@@ -2330,7 +2329,7 @@ async function seed() {
     bsName: string,
     enName: string,
     slug: string,
-    categoryId: number | string,
+    categoryId: number,
     bsDesc: string,
     enDesc: string,
     image: string,
@@ -2556,7 +2555,7 @@ async function seed() {
     bsName: string,
     enName: string,
     slug: string,
-    categoryId: number | string,
+    categoryId: number,
     bsDesc: string,
     enDesc: string,
     image: string,
