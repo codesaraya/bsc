@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
-import { categories as fallbackCategories } from "@/data/materials";
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { getLocale } from '@/lib/locale';
@@ -56,7 +55,7 @@ const defaultWhyChooseUs = [
 const whyIcons = [Sparkles, Shield, Clock, Award];
 
 export default async function MaterialsPage() {
-  let categories = fallbackCategories;
+  let categories: any[] = [];
   let pageData: any = null;
   let siteSettings: any = null;
 
@@ -102,7 +101,7 @@ export default async function MaterialsPage() {
   const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
   const whyCards = d?.whyCards?.length > 0 ? d.whyCards : defaultWhyChooseUs;
 
-  const totalMaterials = categories.reduce((sum, c) => sum + c.items.length, 0);
+  const totalMaterials = categories.reduce((sum: number, c: any) => sum + c.items.length, 0);
   return (
     <>
       {/* Hero */}
@@ -150,7 +149,7 @@ export default async function MaterialsPage() {
             subtitle={d?.categoriesSubtitle || "Svaka kategorija obuhvata različite materijale i tehnike obrade."}
           />
           <div className="grid md:grid-cols-2 gap-4 sm:gap-8 mt-12">
-            {categories.map((cat) => (
+            {categories.map((cat: any) => (
               <Link
                 key={cat.slug}
                 href={`/materials/${cat.slug}`}
@@ -178,7 +177,7 @@ export default async function MaterialsPage() {
                     {cat.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {cat.items.slice(0, 5).map((item) => (
+                    {cat.items.slice(0, 5).map((item: any) => (
                       <span
                         key={item.name}
                         className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"

@@ -10,6 +10,7 @@ data/
 build-*.txt
 seed-*.txt
 drop-db.mjs
+.pnpm-store
 
 # Large image directories (served from Supabase storage)
 public/media

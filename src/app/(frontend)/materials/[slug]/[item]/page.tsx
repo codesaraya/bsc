@@ -4,13 +4,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
 import { getImageUrl } from '@/lib/imageUrl';
-import {
-  getMaterialItem as getStaticMaterialItem,
-  getAllMaterialItemParams,
-  categories as fallbackCategories,
-  type MaterialCategory,
-  type MaterialItem,
-} from "@/data/materials";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { getLocale } from '@/lib/locale';
@@ -32,7 +25,6 @@ import {
   Settings,
 } from "lucide-react";
 import Gallery from "@/components/ui/Gallery";
-import { getMaterialGalleryPhotos } from "@/data/galleryImages";
 
 /* ── Static params ── */
 export async function generateStaticParams() {
@@ -53,7 +45,7 @@ export async function generateStaticParams() {
   } catch {
     // fallback
   }
-  return getAllMaterialItemParams();
+  return [];
 }
 
 /* ── Dynamic metadata ── */
@@ -85,12 +77,7 @@ export async function generateMetadata({
     // fallback
   }
 
-  const result = getStaticMaterialItem(slug, itemSlug);
-  if (!result) return { title: notFoundTitle };
-  return {
-    title: `${result.item.name} - ${result.category.title} - BSC`,
-    description: result.item.description,
-  };
+  return { title: notFoundTitle };
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -107,9 +94,9 @@ export default async function MaterialItemPage({
 }) {
   const { slug, item: itemSlug } = await params;
 
-  let category: MaterialCategory | undefined;
-  let item: MaterialItem | undefined;
-  let allCategories: MaterialCategory[] = fallbackCategories;
+  let category: any;
+  let item: any;
+  let allCategories: any[] = [];
   let phone = '+387 33 571 111';
   let dp: any = null;
   let uiLabels: any = {};
@@ -160,24 +147,15 @@ export default async function MaterialItemPage({
     // fallback to static data
   }
 
-  category = allCategories.find((c) => c.slug === slug);
+  category = allCategories.find((c: any) => c.slug === slug);
   if (category) {
-    item = category.items.find((i) => i.slug === itemSlug);
-  }
-
-  // Fallback to static data
-  if (!category || !item) {
-    const staticResult = getStaticMaterialItem(slug, itemSlug);
-    if (staticResult) {
-      category = staticResult.category;
-      item = staticResult.item;
-    }
+    item = category.items.find((i: any) => i.slug === itemSlug);
   }
 
   if (!category || !item) notFound();
 
   /* Prev / next items within same category */
-  const currentIdx = category.items.findIndex((i) => i.slug === itemSlug);
+  const currentIdx = category.items.findIndex((i: any) => i.slug === itemSlug);
   const prevItem = currentIdx > 0 ? category.items[currentIdx - 1] : null;
   const nextItem =
     currentIdx < category.items.length - 1
@@ -186,11 +164,11 @@ export default async function MaterialItemPage({
 
   /* Related items from same category */
   const relatedItems = category.items
-    .filter((i) => i.slug !== itemSlug)
+    .filter((i: any) => i.slug !== itemSlug)
     .slice(0, 4);
 
   /* Other categories for cross-promotion */
-  const otherCategories = allCategories.filter((c) => c.slug !== slug).slice(0, 3);
+  const otherCategories = allCategories.filter((c: any) => c.slug !== slug).slice(0, 3);
 
   const ip = dp?.itemPage;
   const featureIcons = [<Shield key="1" className="w-5 h-5" />, <Ruler key="2" className="w-5 h-5" />, <Sparkles key="3" className="w-5 h-5" />, <Layers key="4" className="w-5 h-5" />, <Palette key="5" className="w-5 h-5" />, <Eye key="6" className="w-5 h-5" />];
@@ -372,7 +350,7 @@ export default async function MaterialItemPage({
               color={category.color}
               itemName={item.name}
               categoryName={category.title}
-              photos={item.galleryPhotos && item.galleryPhotos.length > 0 ? item.galleryPhotos : getMaterialGalleryPhotos(category.slug, item.slug)}
+              photos={item.galleryPhotos && item.galleryPhotos.length > 0 ? item.galleryPhotos : []}
               exampleLabel={uiLabels?.galleryExample}
               photosLabel={uiLabels?.galleryPhotos}
               carouselLabel={uiLabels?.galleryCarousel}
@@ -420,7 +398,7 @@ export default async function MaterialItemPage({
                 </h2>
                 <p className="text-gray-500 text-sm mb-6">{ip?.relatedSubtitle || `Istražite još ${relatedItems.length} materijala iz iste kategorije.`}</p>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                  {relatedItems.map((related) => (
+                  {relatedItems.map((related: any) => (
                     <Link
                       key={related.slug}
                       href={`/materials/${category.slug}/${related.slug}`}
@@ -459,7 +437,7 @@ export default async function MaterialItemPage({
                 <h2 className="text-2xl font-bold text-dark mb-2">{ip?.exploreCategoriesTitle || 'Istražite druge kategorije'}</h2>
                 <p className="text-gray-500 text-sm mb-6">{ip?.exploreCategoriesSubtitle || 'Pogledajte i ostale tehnologije i materijale koje nudimo.'}</p>
                 <div className="grid sm:grid-cols-3 gap-4">
-                  {otherCategories.map((cat) => (
+                  {otherCategories.map((cat: any) => (
                     <Link
                       key={cat.slug}
                       href={`/materials/${cat.slug}`}

@@ -6,11 +6,10 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import NewsCard from "@/components/cards/NewsCard";
-import { articles as defaultArticles } from "@/data/news";
 import { getImageUrl } from "@/lib/imageUrl";
 
 export default function NewsSection({ data, articles }: { data?: any; articles?: any[] }) {
-  const newsArticles = (articles && articles.length > 0 ? articles : defaultArticles).map((item: any) => ({
+  const newsArticles = (articles && articles.length > 0 ? articles : []).map((item: any) => ({
     ...item,
     imageUrl: item.imageUrl || getImageUrl(item.uploadedImage),
   }));

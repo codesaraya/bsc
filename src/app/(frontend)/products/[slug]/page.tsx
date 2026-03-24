@@ -4,12 +4,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
 import { getImageUrl } from '@/lib/imageUrl';
-import {
-  productCategories as fallbackProductCategories,
-  getProductCategoryBySlug as getStaticProductCategoryBySlug,
-  getAllProductSlugs,
-  type ProductCategory,
-} from "@/data/products";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { getLocale } from '@/lib/locale';
@@ -47,7 +41,7 @@ export async function generateStaticParams() {
   } catch {
     // fallback
   }
-  return getAllProductSlugs().map((slug) => ({ slug }));
+  return [];
 }
 
 /* ── Dynamic metadata ── */
@@ -84,12 +78,7 @@ export async function generateMetadata({
     // fallback
   }
 
-  const category = getStaticProductCategoryBySlug(slug);
-  if (!category) return { title: notFoundTitle };
-  return {
-    title: `${category.title} - BSC`,
-    description: category.description,
-  };
+  return { title: notFoundTitle };
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -106,8 +95,8 @@ export default async function ProductCategoryPage({
 }) {
   const { slug } = await params;
 
-  let category: ProductCategory | undefined;
-  let allCategories: ProductCategory[] = fallbackProductCategories;
+  let category: any;
+  let allCategories: any[] = [];
   let phone = '+387 33 571 111';
   let dp: any = null;
 
@@ -152,13 +141,10 @@ export default async function ProductCategoryPage({
     // fallback to static data
   }
 
-  category = allCategories.find((c) => c.slug === slug);
-  if (!category) {
-    category = getStaticProductCategoryBySlug(slug);
-  }
+  category = allCategories.find((c: any) => c.slug === slug);
   if (!category) notFound();
 
-  const currentIndex = allCategories.findIndex((c) => c.slug === slug);
+  const currentIndex = allCategories.findIndex((c: any) => c.slug === slug);
   const prev = currentIndex > 0 ? allCategories[currentIndex - 1] : null;
   const next =
     currentIndex < allCategories.length - 1
@@ -166,7 +152,7 @@ export default async function ProductCategoryPage({
       : null;
 
   /* Other categories for cross-promotion */
-  const otherCategories = allCategories.filter((c) => c.slug !== slug).slice(0, 3);
+  const otherCategories = allCategories.filter((c: any) => c.slug !== slug).slice(0, 3);
 
   const cp = dp?.categoryPage;
   const whyIcons = [<Sparkles key="s" className="w-5 h-5" />, <Shield key="sh" className="w-5 h-5" />, <Clock key="c" className="w-5 h-5" />, <Palette key="p" className="w-5 h-5" />, <Users key="u" className="w-5 h-5" />, <Award key="a" className="w-5 h-5" />];
@@ -243,7 +229,7 @@ export default async function ProductCategoryPage({
             </p>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-5">
-              {category.items.map((item, i) => (
+              {category.items.map((item: any, i: number) => (
                 <Link
                   key={`${item.name}-${i}`}
                   href={`/products/${category.slug}/${item.slug}`}
@@ -339,7 +325,7 @@ export default async function ProductCategoryPage({
               <h2 className="text-2xl font-bold text-dark mb-2">{cp?.exploreCategoriesTitle || 'Istražite druge kategorije'}</h2>
               <p className="text-gray-500 text-sm mb-6">{cp?.exploreCategoriesSubtitle || 'Pogledajte i ostale kategorije proizvoda iz naše ponude.'}</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {otherCategories.map((cat) => (
+                {otherCategories.map((cat: any) => (
                   <Link
                     key={cat.slug}
                     href={`/products/${cat.slug}`}

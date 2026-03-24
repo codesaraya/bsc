@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
-import { articles as fallbackArticles } from "@/data/news";
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { getLocale } from '@/lib/locale';
@@ -28,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function NewsPage() {
-  let articles = fallbackArticles;
+  let articles: any[] = [];
   let pageData: any = null;
 
   try {
@@ -71,8 +70,8 @@ export default async function NewsPage() {
   const d = pageData;
   const uiLabels = (d as any)?._uiLabels || {};
 
-  const featured = articles[0];
-  const rest = articles.slice(1);
+  const featured = articles[0] ?? null;
+  const rest = featured ? articles.slice(1) : articles;
   const categories = [d?.allCategoryText || "Sve", ...Array.from(new Set(articles.map((a) => a.category)))];
 
   return (
@@ -108,12 +107,10 @@ export default async function NewsPage() {
       </section>
 
       {/* Featured Article */}
+      {featured && (
       <section className="py-10 sm:py-16">
         <Container>
-          <Link
-            href={`/news/${featured.slug}`}
-            className="block group"
-          >
+          <Link href={`/news/${featured.slug}`} className="block group">
             <div className="relative rounded-[2rem] overflow-hidden" style={{ background: "linear-gradient(135deg, #c8b6ff 0%, #b8c0ff 20%, #d4c5f9 40%, #f0c6e8 60%, #f8d0e8 80%, #f5d0e0 100%)" }}>
               <div className="absolute top-0 left-0 w-72 h-72 bg-blue-300/30 rounded-full blur-3xl -translate-x-1/3 -translate-y-1/3" />
               <div className="absolute bottom-0 right-0 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl translate-x-1/4 translate-y-1/4" />
@@ -170,6 +167,7 @@ export default async function NewsPage() {
           </Link>
         </Container>
       </section>
+      )}
 
       {/* Category Pills */}
       <section className="pb-4">
