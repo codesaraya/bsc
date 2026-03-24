@@ -6,7 +6,7 @@ node_modules
 src/payload-types.ts
 *.tsbuildinfo
 dist/
-data/
+/data/
 build-*.txt
 seed-*.txt
 drop-db.mjs
