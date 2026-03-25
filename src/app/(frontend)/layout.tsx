@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const payload = await getPayload({ config });
     const locale = await getLocale();
-    const ss: any = await payload.findGlobal({ slug: 'site-settings' as any, locale } as any);
+    const ss: any = await payload.findGlobal({ slug: 'site-settings' as any, locale, depth: 2 } as any);
 
     const faviconUrl = getImageUrl(ss?.logos?.favicon);
     const appleTouchUrl = getImageUrl(ss?.logos?.faviconApple);
@@ -48,9 +48,9 @@ export default async function FrontendLayout({
   const payload = await getPayload({ config });
 
   const [navigationData, footerData, siteSettings] = await Promise.all([
-    payload.findGlobal({ slug: 'navigation' as any, locale } as any).catch(() => null),
-    payload.findGlobal({ slug: 'footer' as any, locale } as any).catch(() => null),
-    payload.findGlobal({ slug: 'site-settings' as any, locale } as any).catch(() => null),
+    payload.findGlobal({ slug: 'navigation' as any, locale, depth: 2 } as any).catch(() => null),
+    payload.findGlobal({ slug: 'footer' as any, locale, depth: 2 } as any).catch(() => null),
+    payload.findGlobal({ slug: 'site-settings' as any, locale, depth: 2 } as any).catch(() => null),
   ]);
 
   return (

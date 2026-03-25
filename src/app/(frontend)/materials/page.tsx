@@ -55,7 +55,7 @@ const defaultWhyChooseUs = [
 const whyIcons = [Sparkles, Shield, Clock, Award];
 
 export default async function MaterialsPage() {
-  let categories: any[] = [];
+  let categories: { title: string; slug: string; description: string; color: string; items: { name: string; slug: string; description: string; image?: string }[] }[] = [];
   let pageData: any = null;
   let siteSettings: any = null;
 
@@ -101,7 +101,7 @@ export default async function MaterialsPage() {
   const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
   const whyCards = d?.whyCards?.length > 0 ? d.whyCards : defaultWhyChooseUs;
 
-  const totalMaterials = categories.reduce((sum: number, c: any) => sum + c.items.length, 0);
+  const totalMaterials = categories.reduce((sum, c) => sum + c.items.length, 0);
   return (
     <>
       {/* Hero */}
@@ -149,7 +149,7 @@ export default async function MaterialsPage() {
             subtitle={d?.categoriesSubtitle || "Svaka kategorija obuhvata različite materijale i tehnike obrade."}
           />
           <div className="grid md:grid-cols-2 gap-4 sm:gap-8 mt-12">
-            {categories.map((cat: any) => (
+            {categories.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/materials/${cat.slug}`}
@@ -177,7 +177,7 @@ export default async function MaterialsPage() {
                     {cat.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {cat.items.slice(0, 5).map((item: any) => (
+                    {cat.items.slice(0, 5).map((item) => (
                       <span
                         key={item.name}
                         className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"

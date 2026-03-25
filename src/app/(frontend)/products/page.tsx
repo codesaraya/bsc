@@ -54,7 +54,7 @@ const defaultWhyChooseUs = [
 const whyIcons = [Sparkles, Shield, Clock, Users];
 
 export default async function ProductsPage() {
-  let productCategories: any[] = [];
+  let productCategories: { title: string; slug: string; description: string; color: string; items: { name: string; slug: string; description: string; image?: string }[] }[] = [];
   let pageData: any = null;
   let siteSettings: any = null;
 
@@ -100,7 +100,7 @@ export default async function ProductsPage() {
   const phoneHref = `tel:${phone.replace(/\s/g, '')}`;
   const whyCards = d?.whyCards?.length > 0 ? d.whyCards : defaultWhyChooseUs;
 
-  const totalProducts = productCategories.reduce((sum: number, c: any) => sum + c.items.length, 0);
+  const totalProducts = productCategories.reduce((sum, c) => sum + c.items.length, 0);
   return (
     <>
       {/* Hero */}
@@ -148,7 +148,7 @@ export default async function ProductsPage() {
             subtitle={d?.categoriesSubtitle || "Svaka kategorija nudi specijalizirana rješenja za vaše potrebe."}
           />
           <div className="grid md:grid-cols-2 gap-4 sm:gap-8 mt-12">
-            {productCategories.map((cat: any, idx: number) => (
+            {productCategories.map((cat, idx) => (
               <Link
                 key={cat.slug}
                 href={`/products/${cat.slug}`}
@@ -177,7 +177,7 @@ export default async function ProductsPage() {
                     {cat.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {cat.items.slice(0, 4).map((item: any) => (
+                    {cat.items.slice(0, 4).map((item) => (
                       <span
                         key={item.name}
                         className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium"

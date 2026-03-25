@@ -1,16 +1,6 @@
-@import "tailwindcss";
-
-@theme inline {
-  --color-primary: #42C6D9;
-  --color-secondary: #E91E90;
-  --color-dark: #1A1464;
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-  --font-sans: var(--font-poppins);
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
-  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.08);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
   background: var(--color-background);

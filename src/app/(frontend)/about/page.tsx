@@ -28,8 +28,8 @@ export default async function AboutPage() {
   let homepageData: any = null
   try {
     [aboutData, homepageData] = await Promise.all([
-      payload.findGlobal({ slug: 'about-page' as any, locale } as any),
-      payload.findGlobal({ slug: 'homepage' as any, locale } as any),
+      payload.findGlobal({ slug: 'about-page' as any, locale, depth: 2 } as any),
+      payload.findGlobal({ slug: 'homepage' as any, locale, depth: 2 } as any),
     ])
   } catch (e) {
     // fallback to null – client component will use hardcoded defaults

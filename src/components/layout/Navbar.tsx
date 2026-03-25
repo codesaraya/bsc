@@ -242,7 +242,7 @@ export default function Navbar({ data, siteSettings, locale = 'bs' }: { data?: a
                         leaveFrom="opacity-100 translate-y-0"
                         leaveTo="opacity-0 translate-y-1"
                       >
-                        <PopoverPanel className="absolute left-0 right-0 top-full mt-0 bg-[#0c0a2a]/98 backdrop-blur-xl rounded-b-2xl shadow-2xl shadow-black/40 border-x border-b border-white/5 z-50 overflow-hidden">
+                        <PopoverPanel className="absolute left-0 right-0 top-full mt-0 bg-[#0c0a2a] rounded-b-2xl shadow-2xl shadow-black/40 border-x border-b border-white/5 z-50 overflow-hidden">
                           {({ close }) => (
                           <>
                           {/* Top separator line */}

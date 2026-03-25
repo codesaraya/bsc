@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
+import {
+  getArticleBySlug as getStaticArticleBySlug,
+  getAllSlugs,
+} from "@/data/news";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { getLocale } from '@/lib/locale';
@@ -31,7 +35,7 @@ export async function generateStaticParams() {
   } catch {
     // fallback
   }
-  return [];
+  return getAllSlugs().map((slug) => ({ slug }));
 }
 
 /* ── Dynamic metadata ── */
@@ -68,7 +72,12 @@ export async function generateMetadata({
     // fallback to static
   }
 
-  return { title: notFoundTitle };
+  const article = getStaticArticleBySlug(slug);
+  if (!article) return { title: notFoundTitle };
+  return {
+    title: `${article.title} - BSC`,
+    description: article.excerpt,
+  };
 }
 
 /* ── Simple markdown-ish renderer ── */
@@ -198,6 +207,7 @@ export default async function NewsArticlePage({
     // fallback to static
   }
 
+  // No static fallback — all data must come from the database
   if (!article) notFound();
 
   /* Related articles (exclude current, pick up to 3) */

@@ -4,6 +4,12 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Container from "@/components/ui/Container";
 import { getImageUrl } from '@/lib/imageUrl';
+import {
+  getProductItem as getStaticProductItem,
+  getAllProductItemParams,
+  type ProductCategory,
+  type ProductItem,
+} from "@/data/products";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { getLocale } from '@/lib/locale';
@@ -45,7 +51,7 @@ export async function generateStaticParams() {
   } catch {
     // fallback
   }
-  return [];
+  return getAllProductItemParams();
 }
 
 /* ── Dynamic metadata ── */
@@ -77,7 +83,12 @@ export async function generateMetadata({
     // fallback
   }
 
-  return { title: notFoundTitle };
+  const result = getStaticProductItem(slug, itemSlug);
+  if (!result) return { title: notFoundTitle };
+  return {
+    title: `${result.item.name} - ${result.category.title} - BSC`,
+    description: result.item.description,
+  };
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -94,9 +105,9 @@ export default async function ProductItemPage({
 }) {
   const { slug, item: itemSlug } = await params;
 
-  let category: any;
-  let item: any;
-  let allCategories: any[] = [];
+  let category: ProductCategory | undefined;
+  let item: ProductItem | undefined;
+  let allCategories: ProductCategory[] = [];
   let phone = '+387 33 571 111';
   let dp: any = null;
   let uiLabels: any = {};
@@ -131,7 +142,7 @@ export default async function ProductItemPage({
             longDescription2: it.longDescription2 || '',
             itemFeatures: (it.features || []).map((f: any) => ({ title: f.title, text: f.description, icon: f.icon })),
             image: getImageUrl(it.uploadedImage),
-            galleryPhotos: (it.galleryImages || []).map((gi: any) => getImageUrl(gi.uploadedImage)).filter(Boolean),
+            galleryPhotos: (it.galleryImages || []).map((gi: any) => getImageUrl(gi.uploadedImage)).filter(Boolean).reverse(),
           }));
 
         return {
@@ -147,15 +158,17 @@ export default async function ProductItemPage({
     // fallback to static data
   }
 
-  category = allCategories.find((c: any) => c.slug === slug);
+  category = allCategories.find((c) => c.slug === slug);
   if (category) {
-    item = category.items.find((i: any) => i.slug === itemSlug);
+    item = category.items.find((i) => i.slug === itemSlug);
   }
+
+  // No static fallback — all data must come from the database
 
   if (!category || !item) notFound();
 
   /* Find prev/next items within the same category */
-  const currentIdx = category.items.findIndex((i: any) => i.slug === itemSlug);
+  const currentIdx = category.items.findIndex((i) => i.slug === itemSlug);
   const prevItem = currentIdx > 0 ? category.items[currentIdx - 1] : null;
   const nextItem =
     currentIdx < category.items.length - 1
@@ -163,10 +176,10 @@ export default async function ProductItemPage({
       : null;
 
   /* Other items from same category for "related" */
-  const relatedItems = category.items.filter((i: any) => i.slug !== itemSlug).slice(0, 4);
+  const relatedItems = category.items.filter((i) => i.slug !== itemSlug).slice(0, 4);
 
   /* Other categories */
-  const otherCategories = allCategories.filter((c: any) => c.slug !== slug).slice(0, 3);
+  const otherCategories = allCategories.filter((c) => c.slug !== slug).slice(0, 3);
 
   const ip = dp?.itemPage;
   const uspIcons = [<Sparkles key="1" className="w-5 h-5" />, <Shield key="2" className="w-5 h-5" />, <Clock key="3" className="w-5 h-5" />, <Settings key="4" className="w-5 h-5" />];
@@ -336,7 +349,7 @@ export default async function ProductItemPage({
               color={category.color}
               itemName={item.name}
               categoryName={category.title}
-              photos={item.galleryPhotos && item.galleryPhotos.length > 0 ? item.galleryPhotos : []}
+              photos={item.galleryPhotos || []}
               exampleLabel={uiLabels?.galleryExample}
               photosLabel={uiLabels?.galleryPhotos}
               carouselLabel={uiLabels?.galleryCarousel}
@@ -384,7 +397,7 @@ export default async function ProductItemPage({
                 </h2>
                 <p className="text-gray-500 text-sm mb-6">{ip?.relatedSubtitle || `Istražite još ${relatedItems.length} proizvoda iz iste kategorije.`}</p>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                  {relatedItems.map((related: any) => (
+                  {relatedItems.map((related) => (
                     <Link
                       key={related.slug}
                       href={`/products/${category.slug}/${related.slug}`}
@@ -423,7 +436,7 @@ export default async function ProductItemPage({
                 <h2 className="text-2xl font-bold text-dark mb-2">{ip?.exploreCategoriesTitle || 'Istražite druge kategorije'}</h2>
                 <p className="text-gray-500 text-sm mb-6">{ip?.exploreCategoriesSubtitle || 'Pogledajte i ostale kategorije proizvoda iz naše ponude.'}</p>
                 <div className="grid sm:grid-cols-3 gap-4">
-                  {otherCategories.map((cat: any) => (
+                  {otherCategories.map((cat) => (
                     <Link
                       key={cat.slug}
                       href={`/products/${cat.slug}`}

@@ -11,9 +11,31 @@ function getPublicUrl(filePath: string): string {
   return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${filePath}`
 }
 
+/** Sanitize filename for Supabase Storage: transliterate diacritics, replace spaces */
+function sanitizeFilename(name: string): string {
+  const charMap: Record<string, string> = {
+    'ć': 'c', 'č': 'c', 'đ': 'd', 'š': 's', 'ž': 'z',
+    'Ć': 'C', 'Č': 'C', 'Đ': 'D', 'Š': 'S', 'Ž': 'Z',
+    'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'ss',
+    'Ä': 'A', 'Ö': 'O', 'Ü': 'U',
+    'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+    'à': 'a', 'â': 'a', 'á': 'a',
+    'ì': 'i', 'î': 'i', 'í': 'i', 'ï': 'i',
+    'ò': 'o', 'ô': 'o', 'ó': 'o',
+    'ù': 'u', 'û': 'u', 'ú': 'u',
+    'ñ': 'n',
+  }
+  return name
+    .split('')
+    .map(c => charMap[c] || c)
+    .join('')
+    .replace(/[^a-zA-Z0-9._-]/g, '-')
+    .replace(/-+/g, '-')
+}
+
 const getGenerateURL = () => {
   return ({ filename, prefix = '' }: { filename: string; prefix?: string }) => {
-    const key = path.posix.join(prefix, filename)
+    const key = path.posix.join(prefix, sanitizeFilename(filename))
     return getPublicUrl(key)
   }
 }
@@ -21,7 +43,8 @@ const getGenerateURL = () => {
 const getHandleUpload = () => {
   return async ({ data, file, req }: any) => {
     const prefix = data.prefix || ''
-    const key = path.posix.join(prefix, file.filename)
+    const safeName = sanitizeFilename(file.filename)
+    const key = path.posix.join(prefix, safeName)
     const body = file.buffer
 
     const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${key}`, {
@@ -47,7 +70,7 @@ const getHandleUpload = () => {
 const getHandleDelete = () => {
   return async ({ doc, filename, req }: any) => {
     const prefix = doc.prefix || ''
-    const key = path.posix.join(prefix, filename)
+    const key = path.posix.join(prefix, sanitizeFilename(filename))
 
     const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}`, {
       method: 'DELETE',

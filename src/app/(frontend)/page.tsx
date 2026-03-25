@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const payload = await getPayload({ config });
     const locale = await getLocale();
-    const hp = await payload.findGlobal({ slug: 'homepage' as any, locale } as any);
+    const hp = await payload.findGlobal({ slug: 'homepage' as any, locale, depth: 2 } as any);
     return {
       title: (hp as any)?.metaTitle || "BSC - Best Solution Company",
       description: (hp as any)?.metaDescription || "Specijalizirana digitalna štamparija u Sarajevu. UV štampa, brendiranje, tapete, 3D paneli i više.",
@@ -38,9 +38,9 @@ export default async function Home() {
   const locale = await getLocale();
 
   const [homepageData, newsResult, siteSettingsData] = await Promise.all([
-    payload.findGlobal({ slug: 'homepage' as any, locale } as any).catch(() => ({})),
-    payload.find({ collection: 'news-articles' as any, limit: 3, sort: '-createdAt', locale } as any).catch(() => ({ docs: [] })),
-    payload.findGlobal({ slug: 'site-settings' as any, locale } as any).catch(() => ({})),
+    payload.findGlobal({ slug: 'homepage' as any, locale, depth: 2 } as any).catch(() => ({})),
+    payload.find({ collection: 'news-articles' as any, limit: 3, sort: '-createdAt', locale, depth: 2 } as any).catch(() => ({ docs: [] })),
+    payload.findGlobal({ slug: 'site-settings' as any, locale, depth: 2 } as any).catch(() => ({})),
   ]);
 
   const hp: any = homepageData;
